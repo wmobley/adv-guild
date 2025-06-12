@@ -7,8 +7,9 @@ const ItineraryForm = () => {
   return (
     <section className="bg-white p-6 rounded-xl shadow-md">
       <h3 className="text-2xl font-bold text-yellow-700 mb-4">Begin a New Quest</h3>
-        <label>Starting Location</label>
-        <label>Quest Theme (Myth, Movie, Author)</label>
+        <label>Where does your journey begin?</label>
+        <label>What inspires your quest? (Myth, Author, Movie...)</label>
+
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-gray-700">Starting Location</label>
