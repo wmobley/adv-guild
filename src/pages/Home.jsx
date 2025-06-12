@@ -1,12 +1,14 @@
 import Header from '../components/Header';
-import ItineraryForm from '../components/ItineraryForm';
-import LocationCard from '../components/LocationCard';
+import QuestForm from '../components/QuestForm';
+import QuestCard from "../components/QuestCard"
 import Map from '../components/Map';
+import Hero from '../components/Hero';
 
 const Home = () => {
   return (
     <>
       <Header />
+   <Hero />
       <main className="max-w-6xl mx-auto px-4 py-12 space-y-12">
         <Map />
 
@@ -17,15 +19,15 @@ const Home = () => {
           </p>
         </section>
 
-        <ItineraryForm />
+        <QuestForm />
 
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <LocationCard
+          <QuestCard
             title="Lauterbrunnen Valley, Switzerland"
             subtitle="Inspiration for Tolkien's Rivendell"
             description="Tolkien hiked through Lauterbrunnen in 1911 and was captivated by its towering cliffs and cascading waterfalls..."
           />
-          <LocationCard
+          <QuestCard
             title="Newburyport, Massachusetts"
             subtitle="Inspiration for Lovecraft's Innsmouth"
             description="This coastal town inspired H.P. Lovecraft’s eerie fishing village in 'The Shadow over Innsmouth'..."

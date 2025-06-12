@@ -6,7 +6,9 @@ const ItineraryForm = () => {
 
   return (
     <section className="bg-white p-6 rounded-xl shadow-md">
-      <h3 className="text-2xl font-bold text-indigo-700 mb-4">Generate Your Mythic Itinerary</h3>
+      <h3 className="text-2xl font-bold text-yellow-700 mb-4">Begin a New Quest</h3>
+        <label>Starting Location</label>
+        <label>Quest Theme (Myth, Movie, Author)</label>
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-gray-700">Starting Location</label>
@@ -27,3 +29,4 @@ const ItineraryForm = () => {
 };
 
 export default ItineraryForm;
+
