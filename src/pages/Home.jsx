@@ -9,8 +9,9 @@ const Home = () => {
     <>
       <Header />
       <main className="max-w-6xl mx-auto px-4 py-12 space-y-12">
+         <Map />
         <Hero />
-        <Map />
+       
         <QuestForm />
 
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -22,14 +23,14 @@ const Home = () => {
           <QuestCard
             title="The Drowned Port"
             subtitle="Based on Newburyport, MA"
-            description="Foggy shores and Gothic buildings formed the backdrop to Lovecraft’s Innsmouth — beware what sleeps below."
+            description="Foggy shores and Gothic buildings formed the backdrop to Lovecraft's Innsmouth — beware what sleeps below."
           />
         </section>
       </main>
 
-      <footer className="bg-white border-t mt-16">
-        <div className="max-w-7xl mx-auto px-4 py-6 text-sm text-gray-500 text-center">
-          &copy; 2025 The Adventurer’s Guild. All rights reserved.
+      <footer className="bg-guild-secondary border-t border-guild-neutral/20 mt-16">
+        <div className="max-w-7xl mx-auto px-4 py-6 text-sm text-guild-neutral text-center">
+          &copy; 2025 The Adventurer's Guild. All rights reserved.
         </div>
       </footer>
     </>

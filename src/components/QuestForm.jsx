@@ -5,22 +5,33 @@ const ItineraryForm = () => {
   };
 
   return (
-    <section className="bg-white p-6 rounded-xl shadow-md">
-      <h3 className="text-2xl font-bold text-yellow-700 mb-4">Begin a New Quest</h3>
-        <label>Where does your journey begin?</label>
-        <label>What inspires your quest? (Myth, Author, Movie...)</label>
+    <section className="bg-guild-secondary p-6 rounded-xl shadow-md border border-guild-highlight/20">
+      <h3 className="text-2xl font-bold text-guild-primary mb-4">Begin a New Quest</h3>
+        <label className="text-guild-text font-medium">Where does your journey begin?</label>
+        <label className="text-guild-text font-medium">What inspires your quest? (Myth, Author, Movie...)</label>
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700">Starting Location</label>
-          <input type="text" placeholder="e.g. Paris, France" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
+          <label className="block text-sm font-medium text-guild-text">Starting Location</label>
+          <input 
+            type="text" 
+            placeholder="e.g. Paris, France" 
+            className="mt-1 block w-full rounded-md border-guild-neutral/30 shadow-sm bg-white text-guild-text placeholder-guild-neutral focus:border-guild-highlight focus:ring-guild-highlight" 
+          />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">Interest (Myth, Movie, Author)</label>
-          <input type="text" placeholder="e.g. Norse Mythology" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
+          <label className="block text-sm font-medium text-guild-text">Interest (Myth, Movie, Author)</label>
+          <input 
+            type="text" 
+            placeholder="e.g. Norse Mythology" 
+            className="mt-1 block w-full rounded-md border-guild-neutral/30 shadow-sm bg-white text-guild-text placeholder-guild-neutral focus:border-guild-highlight focus:ring-guild-highlight" 
+          />
         </div>
         <div className="md:col-span-2">
-          <button type="submit" className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+          <button 
+            type="submit" 
+            className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-guild-accent hover:bg-guild-accent/90 transition-colors"
+          >
             Generate Itinerary
           </button>
         </div>
@@ -30,4 +41,3 @@ const ItineraryForm = () => {
 };
 
 export default ItineraryForm;
-

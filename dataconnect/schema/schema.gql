@@ -1,0 +1,59 @@
+type User @table {
+  displayName: String!
+  email: String
+  avatarUrl: String
+  createdAt: Timestamp!
+}
+
+type Quest @table {
+  name: String!
+  synopsis: String!
+  startLocation: Location!
+  destination: Location
+  interest: Interest!
+  difficulty: Difficulty!
+  isPublic: Boolean!
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+  questType: QuestType!
+  itinerary: String
+  tags: String
+  questGiver: String
+  reward: String
+  companions: String
+  loreExcerpt: String
+  artifactsDiscovered: String
+  completed: Boolean
+  mediaUrls: String
+  likes: Int
+  bookmarks: Int
+  campaign: Campaign
+  author: User
+}
+
+type QuestType @table {
+  name: String!
+}
+
+type Difficulty @table {
+  name: String!
+}
+
+type Interest @table {
+  name: String!
+}
+
+type Location @table {
+  latitude: Float!
+  longitude: Float!
+  name: String
+  realWorldInspiration: String
+  description: String
+}
+
+type Campaign @table {
+  title: String!
+  description: String
+  createdAt: Timestamp!
+  creator: User
+}

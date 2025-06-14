@@ -1,0 +1,1871 @@
+"""
+✨ `Campaign_KeyOutput` returns the primary key fields of table type `Campaign`.
+
+It has the same format as `Campaign_Key`, but is only used as mutation return value.
+"""
+scalar Campaign_KeyOutput
+"""
+✨ `Difficulty_KeyOutput` returns the primary key fields of table type `Difficulty`.
+
+It has the same format as `Difficulty_Key`, but is only used as mutation return value.
+"""
+scalar Difficulty_KeyOutput
+"""
+✨ `Interest_KeyOutput` returns the primary key fields of table type `Interest`.
+
+It has the same format as `Interest_Key`, but is only used as mutation return value.
+"""
+scalar Interest_KeyOutput
+"""
+✨ `Location_KeyOutput` returns the primary key fields of table type `Location`.
+
+It has the same format as `Location_Key`, but is only used as mutation return value.
+"""
+scalar Location_KeyOutput
+"""
+✨ `Quest_KeyOutput` returns the primary key fields of table type `Quest`.
+
+It has the same format as `Quest_Key`, but is only used as mutation return value.
+"""
+scalar Quest_KeyOutput
+"""
+✨ `QuestType_KeyOutput` returns the primary key fields of table type `QuestType`.
+
+It has the same format as `QuestType_Key`, but is only used as mutation return value.
+"""
+scalar QuestType_KeyOutput
+"""
+✨ `User_KeyOutput` returns the primary key fields of table type `User`.
+
+It has the same format as `User_Key`, but is only used as mutation return value.
+"""
+scalar User_KeyOutput
+"""
+✨ Generated data input type for table 'Campaign'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Campaign_Data {
+  """
+  ✨ Generated from Field `Campaign`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Campaign`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Campaign`.`creatorId` of type `UUID`
+  """
+  creatorId: UUID
+  """
+  ✨ `_expr` server value variant of `creatorId` (✨ Generated from Field `Campaign`.`creatorId` of type `UUID`)
+  """
+  creatorId_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Campaign`.`creator` of type `User`
+  """
+  creator: User_Key
+  """
+  ✨ Generated from Field `Campaign`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `createdAt` (✨ Generated from Field `Campaign`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `createdAt` (✨ Generated from Field `Campaign`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_time: Timestamp_Relative
+  """
+  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `Campaign`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_update: [Timestamp_Update!]
+  """
+  ✨ Generated from Field `Campaign`.`description` of type `String`
+  """
+  description: String
+  """
+  ✨ `_expr` server value variant of `description` (✨ Generated from Field `Campaign`.`description` of type `String`)
+  """
+  description_expr: String_Expr
+  """
+  ✨ Generated from Field `Campaign`.`title` of type `String!`
+  """
+  title: String
+  """
+  ✨ `_expr` server value variant of `title` (✨ Generated from Field `Campaign`.`title` of type `String!`)
+  """
+  title_expr: String_Expr
+}
+"""
+✨ Generated filter input type for table 'Campaign'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Campaign_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Campaign_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Campaign_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Campaign_Filter!]
+  """
+  ✨ Generated from Field `Campaign`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Campaign`.`creatorId` of type `UUID`
+  """
+  creatorId: UUID_Filter
+  """
+  ✨ Generated from Field `Campaign`.`creator` of type `User`
+  """
+  creator: User_Filter
+  """
+  ✨ Generated from Field `Campaign`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `Campaign`.`description` of type `String`
+  """
+  description: String_Filter
+  """
+  ✨ Generated from Field `Campaign`.`title` of type `String!`
+  """
+  title: String_Filter
+  """
+  ✨ Generated from Field `Campaign`.`quests_on_campaign` of type `[Quest!]!`
+  """
+  quests_on_campaign: Quest_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'Campaign'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Campaign_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Campaign_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Campaign_Filter
+}
+"""
+✨ Generated having input type for table 'Campaign'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Campaign_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Campaign_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Campaign_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Campaign_Having!]
+  """
+  ✨ Generated from Field `Campaign`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Campaign`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: Int_Filter
+  """
+  ✨ Generated from Field `Campaign`.`creatorId_count` of type `Int!`
+  """
+  creatorId_count: Int_Filter
+  """
+  ✨ Generated from Field `Campaign`.`description_count` of type `Int!`
+  """
+  description_count: Int_Filter
+  """
+  ✨ Generated from Field `Campaign`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Campaign`.`title_count` of type `Int!`
+  """
+  title_count: Int_Filter
+  """
+  ✨ Generated from Field `Campaign`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Campaign`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'Campaign'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Campaign_Key {
+  """
+  ✨ Generated from Field `Campaign`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Campaign`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+}
+"""
+✨ Generated list filter input type for table 'Campaign'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Campaign_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Campaign_Filter
+}
+"""
+✨ Generated order input type for table 'Campaign'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Campaign_Order {
+  """
+  ✨ Generated from Field `Campaign`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Campaign`.`creatorId` of type `UUID`
+  """
+  creatorId: OrderDirection
+  """
+  ✨ Generated from Field `Campaign`.`creator` of type `User`
+  """
+  creator: User_Order
+  """
+  ✨ Generated from Field `Campaign`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: OrderDirection
+  """
+  ✨ Generated from Field `Campaign`.`description` of type `String`
+  """
+  description: OrderDirection
+  """
+  ✨ Generated from Field `Campaign`.`title` of type `String!`
+  """
+  title: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Difficulty'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Difficulty_Data {
+  """
+  ✨ Generated from Field `Difficulty`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Difficulty`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Difficulty`.`name` of type `String!`
+  """
+  name: String
+  """
+  ✨ `_expr` server value variant of `name` (✨ Generated from Field `Difficulty`.`name` of type `String!`)
+  """
+  name_expr: String_Expr
+}
+"""
+✨ Generated filter input type for table 'Difficulty'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Difficulty_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Difficulty_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Difficulty_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Difficulty_Filter!]
+  """
+  ✨ Generated from Field `Difficulty`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Difficulty`.`name` of type `String!`
+  """
+  name: String_Filter
+  """
+  ✨ Generated from Field `Difficulty`.`quests_on_difficulty` of type `[Quest!]!`
+  """
+  quests_on_difficulty: Quest_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'Difficulty'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Difficulty_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Difficulty_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Difficulty_Filter
+}
+"""
+✨ Generated having input type for table 'Difficulty'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Difficulty_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Difficulty_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Difficulty_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Difficulty_Having!]
+  """
+  ✨ Generated from Field `Difficulty`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Difficulty`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Difficulty`.`name_count` of type `Int!`
+  """
+  name_count: Int_Filter
+}
+"""
+✨ Generated key input type for table 'Difficulty'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Difficulty_Key {
+  """
+  ✨ Generated from Field `Difficulty`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Difficulty`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+}
+"""
+✨ Generated list filter input type for table 'Difficulty'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Difficulty_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Difficulty_Filter
+}
+"""
+✨ Generated order input type for table 'Difficulty'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Difficulty_Order {
+  """
+  ✨ Generated from Field `Difficulty`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Difficulty`.`name` of type `String!`
+  """
+  name: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Interest'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Interest_Data {
+  """
+  ✨ Generated from Field `Interest`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Interest`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Interest`.`name` of type `String!`
+  """
+  name: String
+  """
+  ✨ `_expr` server value variant of `name` (✨ Generated from Field `Interest`.`name` of type `String!`)
+  """
+  name_expr: String_Expr
+}
+"""
+✨ Generated filter input type for table 'Interest'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Interest_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Interest_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Interest_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Interest_Filter!]
+  """
+  ✨ Generated from Field `Interest`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Interest`.`name` of type `String!`
+  """
+  name: String_Filter
+  """
+  ✨ Generated from Field `Interest`.`quests_on_interest` of type `[Quest!]!`
+  """
+  quests_on_interest: Quest_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'Interest'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Interest_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Interest_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Interest_Filter
+}
+"""
+✨ Generated having input type for table 'Interest'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Interest_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Interest_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Interest_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Interest_Having!]
+  """
+  ✨ Generated from Field `Interest`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Interest`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Interest`.`name_count` of type `Int!`
+  """
+  name_count: Int_Filter
+}
+"""
+✨ Generated key input type for table 'Interest'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Interest_Key {
+  """
+  ✨ Generated from Field `Interest`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Interest`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+}
+"""
+✨ Generated list filter input type for table 'Interest'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Interest_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Interest_Filter
+}
+"""
+✨ Generated order input type for table 'Interest'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Interest_Order {
+  """
+  ✨ Generated from Field `Interest`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Interest`.`name` of type `String!`
+  """
+  name: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Location'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Location_Data {
+  """
+  ✨ Generated from Field `Location`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Location`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Location`.`description` of type `String`
+  """
+  description: String
+  """
+  ✨ `_expr` server value variant of `description` (✨ Generated from Field `Location`.`description` of type `String`)
+  """
+  description_expr: String_Expr
+  """
+  ✨ Generated from Field `Location`.`latitude` of type `Float!`
+  """
+  latitude: Float
+  """
+  ✨ `_expr` server value variant of `latitude` (✨ Generated from Field `Location`.`latitude` of type `Float!`)
+  """
+  latitude_expr: Float_Expr
+  """
+  ✨ `_update` server value variant of `latitude` (✨ Generated from Field `Location`.`latitude` of type `Float!`)
+  """
+  latitude_update: [Float_Update!]
+  """
+  ✨ Generated from Field `Location`.`longitude` of type `Float!`
+  """
+  longitude: Float
+  """
+  ✨ `_expr` server value variant of `longitude` (✨ Generated from Field `Location`.`longitude` of type `Float!`)
+  """
+  longitude_expr: Float_Expr
+  """
+  ✨ `_update` server value variant of `longitude` (✨ Generated from Field `Location`.`longitude` of type `Float!`)
+  """
+  longitude_update: [Float_Update!]
+  """
+  ✨ Generated from Field `Location`.`name` of type `String`
+  """
+  name: String
+  """
+  ✨ `_expr` server value variant of `name` (✨ Generated from Field `Location`.`name` of type `String`)
+  """
+  name_expr: String_Expr
+  """
+  ✨ Generated from Field `Location`.`realWorldInspiration` of type `String`
+  """
+  realWorldInspiration: String
+  """
+  ✨ `_expr` server value variant of `realWorldInspiration` (✨ Generated from Field `Location`.`realWorldInspiration` of type `String`)
+  """
+  realWorldInspiration_expr: String_Expr
+}
+"""
+✨ Generated filter input type for table 'Location'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Location_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Location_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Location_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Location_Filter!]
+  """
+  ✨ Generated from Field `Location`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Location`.`description` of type `String`
+  """
+  description: String_Filter
+  """
+  ✨ Generated from Field `Location`.`latitude` of type `Float!`
+  """
+  latitude: Float_Filter
+  """
+  ✨ Generated from Field `Location`.`longitude` of type `Float!`
+  """
+  longitude: Float_Filter
+  """
+  ✨ Generated from Field `Location`.`name` of type `String`
+  """
+  name: String_Filter
+  """
+  ✨ Generated from Field `Location`.`realWorldInspiration` of type `String`
+  """
+  realWorldInspiration: String_Filter
+  """
+  ✨ Generated from Field `Location`.`quests_on_destination` of type `[Quest!]!`
+  """
+  quests_on_destination: Quest_ListFilter
+  """
+  ✨ Generated from Field `Location`.`quests_on_startLocation` of type `[Quest!]!`
+  """
+  quests_on_startLocation: Quest_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'Location'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Location_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Location_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Location_Filter
+}
+"""
+✨ Generated having input type for table 'Location'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Location_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Location_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Location_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Location_Having!]
+  """
+  ✨ Generated from Field `Location`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Location`.`description_count` of type `Int!`
+  """
+  description_count: Int_Filter
+  """
+  ✨ Generated from Field `Location`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Location`.`latitude_count` of type `Int!`
+  """
+  latitude_count: Int_Filter
+  """
+  ✨ Generated from Field `Location`.`longitude_count` of type `Int!`
+  """
+  longitude_count: Int_Filter
+  """
+  ✨ Generated from Field `Location`.`name_count` of type `Int!`
+  """
+  name_count: Int_Filter
+  """
+  ✨ Generated from Field `Location`.`realWorldInspiration_count` of type `Int!`
+  """
+  realWorldInspiration_count: Int_Filter
+  """
+  ✨ Generated from Field `Location`.`latitude_sum` of type `Float`
+  """
+  latitude_sum: Float_Filter
+  """
+  ✨ Generated from Field `Location`.`longitude_sum` of type `Float`
+  """
+  longitude_sum: Float_Filter
+  """
+  ✨ Generated from Field `Location`.`latitude_avg` of type `Float`
+  """
+  latitude_avg: Float_Filter
+  """
+  ✨ Generated from Field `Location`.`longitude_avg` of type `Float`
+  """
+  longitude_avg: Float_Filter
+  """
+  ✨ Generated from Field `Location`.`latitude_min` of type `Float`
+  """
+  latitude_min: Float_Filter
+  """
+  ✨ Generated from Field `Location`.`longitude_min` of type `Float`
+  """
+  longitude_min: Float_Filter
+  """
+  ✨ Generated from Field `Location`.`latitude_max` of type `Float`
+  """
+  latitude_max: Float_Filter
+  """
+  ✨ Generated from Field `Location`.`longitude_max` of type `Float`
+  """
+  longitude_max: Float_Filter
+}
+"""
+✨ Generated key input type for table 'Location'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Location_Key {
+  """
+  ✨ Generated from Field `Location`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Location`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+}
+"""
+✨ Generated list filter input type for table 'Location'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Location_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Location_Filter
+}
+"""
+✨ Generated order input type for table 'Location'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Location_Order {
+  """
+  ✨ Generated from Field `Location`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Location`.`description` of type `String`
+  """
+  description: OrderDirection
+  """
+  ✨ Generated from Field `Location`.`latitude` of type `Float!`
+  """
+  latitude: OrderDirection
+  """
+  ✨ Generated from Field `Location`.`longitude` of type `Float!`
+  """
+  longitude: OrderDirection
+  """
+  ✨ Generated from Field `Location`.`name` of type `String`
+  """
+  name: OrderDirection
+  """
+  ✨ Generated from Field `Location`.`realWorldInspiration` of type `String`
+  """
+  realWorldInspiration: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Quest'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Quest_Data {
+  """
+  ✨ Generated from Field `Quest`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Quest`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Quest`.`authorId` of type `UUID`
+  """
+  authorId: UUID
+  """
+  ✨ `_expr` server value variant of `authorId` (✨ Generated from Field `Quest`.`authorId` of type `UUID`)
+  """
+  authorId_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Quest`.`campaignId` of type `UUID`
+  """
+  campaignId: UUID
+  """
+  ✨ `_expr` server value variant of `campaignId` (✨ Generated from Field `Quest`.`campaignId` of type `UUID`)
+  """
+  campaignId_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Quest`.`destinationId` of type `UUID`
+  """
+  destinationId: UUID
+  """
+  ✨ `_expr` server value variant of `destinationId` (✨ Generated from Field `Quest`.`destinationId` of type `UUID`)
+  """
+  destinationId_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Quest`.`difficultyId` of type `UUID!`
+  """
+  difficultyId: UUID
+  """
+  ✨ `_expr` server value variant of `difficultyId` (✨ Generated from Field `Quest`.`difficultyId` of type `UUID!`)
+  """
+  difficultyId_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Quest`.`interestId` of type `UUID!`
+  """
+  interestId: UUID
+  """
+  ✨ `_expr` server value variant of `interestId` (✨ Generated from Field `Quest`.`interestId` of type `UUID!`)
+  """
+  interestId_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Quest`.`questTypeId` of type `UUID!`
+  """
+  questTypeId: UUID
+  """
+  ✨ `_expr` server value variant of `questTypeId` (✨ Generated from Field `Quest`.`questTypeId` of type `UUID!`)
+  """
+  questTypeId_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Quest`.`startLocationId` of type `UUID!`
+  """
+  startLocationId: UUID
+  """
+  ✨ `_expr` server value variant of `startLocationId` (✨ Generated from Field `Quest`.`startLocationId` of type `UUID!`)
+  """
+  startLocationId_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Quest`.`author` of type `User`
+  """
+  author: User_Key
+  """
+  ✨ Generated from Field `Quest`.`campaign` of type `Campaign`
+  """
+  campaign: Campaign_Key
+  """
+  ✨ Generated from Field `Quest`.`destination` of type `Location`
+  """
+  destination: Location_Key
+  """
+  ✨ Generated from Field `Quest`.`difficulty` of type `Difficulty!`
+  """
+  difficulty: Difficulty_Key
+  """
+  ✨ Generated from Field `Quest`.`interest` of type `Interest!`
+  """
+  interest: Interest_Key
+  """
+  ✨ Generated from Field `Quest`.`questType` of type `QuestType!`
+  """
+  questType: QuestType_Key
+  """
+  ✨ Generated from Field `Quest`.`startLocation` of type `Location!`
+  """
+  startLocation: Location_Key
+  """
+  ✨ Generated from Field `Quest`.`artifactsDiscovered` of type `String`
+  """
+  artifactsDiscovered: String
+  """
+  ✨ `_expr` server value variant of `artifactsDiscovered` (✨ Generated from Field `Quest`.`artifactsDiscovered` of type `String`)
+  """
+  artifactsDiscovered_expr: String_Expr
+  """
+  ✨ Generated from Field `Quest`.`bookmarks` of type `Int`
+  """
+  bookmarks: Int
+  """
+  ✨ `_expr` server value variant of `bookmarks` (✨ Generated from Field `Quest`.`bookmarks` of type `Int`)
+  """
+  bookmarks_expr: Int_Expr
+  """
+  ✨ `_update` server value variant of `bookmarks` (✨ Generated from Field `Quest`.`bookmarks` of type `Int`)
+  """
+  bookmarks_update: [Int_Update!]
+  """
+  ✨ Generated from Field `Quest`.`companions` of type `String`
+  """
+  companions: String
+  """
+  ✨ `_expr` server value variant of `companions` (✨ Generated from Field `Quest`.`companions` of type `String`)
+  """
+  companions_expr: String_Expr
+  """
+  ✨ Generated from Field `Quest`.`completed` of type `Boolean`
+  """
+  completed: Boolean
+  """
+  ✨ `_expr` server value variant of `completed` (✨ Generated from Field `Quest`.`completed` of type `Boolean`)
+  """
+  completed_expr: Boolean_Expr
+  """
+  ✨ Generated from Field `Quest`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `createdAt` (✨ Generated from Field `Quest`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `createdAt` (✨ Generated from Field `Quest`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_time: Timestamp_Relative
+  """
+  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `Quest`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_update: [Timestamp_Update!]
+  """
+  ✨ Generated from Field `Quest`.`isPublic` of type `Boolean!`
+  """
+  isPublic: Boolean
+  """
+  ✨ `_expr` server value variant of `isPublic` (✨ Generated from Field `Quest`.`isPublic` of type `Boolean!`)
+  """
+  isPublic_expr: Boolean_Expr
+  """
+  ✨ Generated from Field `Quest`.`itinerary` of type `String`
+  """
+  itinerary: String
+  """
+  ✨ `_expr` server value variant of `itinerary` (✨ Generated from Field `Quest`.`itinerary` of type `String`)
+  """
+  itinerary_expr: String_Expr
+  """
+  ✨ Generated from Field `Quest`.`likes` of type `Int`
+  """
+  likes: Int
+  """
+  ✨ `_expr` server value variant of `likes` (✨ Generated from Field `Quest`.`likes` of type `Int`)
+  """
+  likes_expr: Int_Expr
+  """
+  ✨ `_update` server value variant of `likes` (✨ Generated from Field `Quest`.`likes` of type `Int`)
+  """
+  likes_update: [Int_Update!]
+  """
+  ✨ Generated from Field `Quest`.`loreExcerpt` of type `String`
+  """
+  loreExcerpt: String
+  """
+  ✨ `_expr` server value variant of `loreExcerpt` (✨ Generated from Field `Quest`.`loreExcerpt` of type `String`)
+  """
+  loreExcerpt_expr: String_Expr
+  """
+  ✨ Generated from Field `Quest`.`mediaUrls` of type `String`
+  """
+  mediaUrls: String
+  """
+  ✨ `_expr` server value variant of `mediaUrls` (✨ Generated from Field `Quest`.`mediaUrls` of type `String`)
+  """
+  mediaUrls_expr: String_Expr
+  """
+  ✨ Generated from Field `Quest`.`name` of type `String!`
+  """
+  name: String
+  """
+  ✨ `_expr` server value variant of `name` (✨ Generated from Field `Quest`.`name` of type `String!`)
+  """
+  name_expr: String_Expr
+  """
+  ✨ Generated from Field `Quest`.`questGiver` of type `String`
+  """
+  questGiver: String
+  """
+  ✨ `_expr` server value variant of `questGiver` (✨ Generated from Field `Quest`.`questGiver` of type `String`)
+  """
+  questGiver_expr: String_Expr
+  """
+  ✨ Generated from Field `Quest`.`reward` of type `String`
+  """
+  reward: String
+  """
+  ✨ `_expr` server value variant of `reward` (✨ Generated from Field `Quest`.`reward` of type `String`)
+  """
+  reward_expr: String_Expr
+  """
+  ✨ Generated from Field `Quest`.`synopsis` of type `String!`
+  """
+  synopsis: String
+  """
+  ✨ `_expr` server value variant of `synopsis` (✨ Generated from Field `Quest`.`synopsis` of type `String!`)
+  """
+  synopsis_expr: String_Expr
+  """
+  ✨ Generated from Field `Quest`.`tags` of type `String`
+  """
+  tags: String
+  """
+  ✨ `_expr` server value variant of `tags` (✨ Generated from Field `Quest`.`tags` of type `String`)
+  """
+  tags_expr: String_Expr
+  """
+  ✨ Generated from Field `Quest`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `updatedAt` (✨ Generated from Field `Quest`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `updatedAt` (✨ Generated from Field `Quest`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_time: Timestamp_Relative
+  """
+  ✨ `_update` server value variant of `updatedAt` (✨ Generated from Field `Quest`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_update: [Timestamp_Update!]
+}
+"""
+✨ Generated filter input type for table 'Quest'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Quest_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Quest_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Quest_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Quest_Filter!]
+  """
+  ✨ Generated from Field `Quest`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Quest`.`authorId` of type `UUID`
+  """
+  authorId: UUID_Filter
+  """
+  ✨ Generated from Field `Quest`.`campaignId` of type `UUID`
+  """
+  campaignId: UUID_Filter
+  """
+  ✨ Generated from Field `Quest`.`destinationId` of type `UUID`
+  """
+  destinationId: UUID_Filter
+  """
+  ✨ Generated from Field `Quest`.`difficultyId` of type `UUID!`
+  """
+  difficultyId: UUID_Filter
+  """
+  ✨ Generated from Field `Quest`.`interestId` of type `UUID!`
+  """
+  interestId: UUID_Filter
+  """
+  ✨ Generated from Field `Quest`.`questTypeId` of type `UUID!`
+  """
+  questTypeId: UUID_Filter
+  """
+  ✨ Generated from Field `Quest`.`startLocationId` of type `UUID!`
+  """
+  startLocationId: UUID_Filter
+  """
+  ✨ Generated from Field `Quest`.`author` of type `User`
+  """
+  author: User_Filter
+  """
+  ✨ Generated from Field `Quest`.`campaign` of type `Campaign`
+  """
+  campaign: Campaign_Filter
+  """
+  ✨ Generated from Field `Quest`.`destination` of type `Location`
+  """
+  destination: Location_Filter
+  """
+  ✨ Generated from Field `Quest`.`difficulty` of type `Difficulty!`
+  """
+  difficulty: Difficulty_Filter
+  """
+  ✨ Generated from Field `Quest`.`interest` of type `Interest!`
+  """
+  interest: Interest_Filter
+  """
+  ✨ Generated from Field `Quest`.`questType` of type `QuestType!`
+  """
+  questType: QuestType_Filter
+  """
+  ✨ Generated from Field `Quest`.`startLocation` of type `Location!`
+  """
+  startLocation: Location_Filter
+  """
+  ✨ Generated from Field `Quest`.`artifactsDiscovered` of type `String`
+  """
+  artifactsDiscovered: String_Filter
+  """
+  ✨ Generated from Field `Quest`.`bookmarks` of type `Int`
+  """
+  bookmarks: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`companions` of type `String`
+  """
+  companions: String_Filter
+  """
+  ✨ Generated from Field `Quest`.`completed` of type `Boolean`
+  """
+  completed: Boolean_Filter
+  """
+  ✨ Generated from Field `Quest`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `Quest`.`isPublic` of type `Boolean!`
+  """
+  isPublic: Boolean_Filter
+  """
+  ✨ Generated from Field `Quest`.`itinerary` of type `String`
+  """
+  itinerary: String_Filter
+  """
+  ✨ Generated from Field `Quest`.`likes` of type `Int`
+  """
+  likes: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`loreExcerpt` of type `String`
+  """
+  loreExcerpt: String_Filter
+  """
+  ✨ Generated from Field `Quest`.`mediaUrls` of type `String`
+  """
+  mediaUrls: String_Filter
+  """
+  ✨ Generated from Field `Quest`.`name` of type `String!`
+  """
+  name: String_Filter
+  """
+  ✨ Generated from Field `Quest`.`questGiver` of type `String`
+  """
+  questGiver: String_Filter
+  """
+  ✨ Generated from Field `Quest`.`reward` of type `String`
+  """
+  reward: String_Filter
+  """
+  ✨ Generated from Field `Quest`.`synopsis` of type `String!`
+  """
+  synopsis: String_Filter
+  """
+  ✨ Generated from Field `Quest`.`tags` of type `String`
+  """
+  tags: String_Filter
+  """
+  ✨ Generated from Field `Quest`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp_Filter
+}
+"""
+✨ Generated first-row input type for table 'Quest'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Quest_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Quest_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Quest_Filter
+}
+"""
+✨ Generated having input type for table 'Quest'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Quest_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Quest_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Quest_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Quest_Having!]
+  """
+  ✨ Generated from Field `Quest`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`artifactsDiscovered_count` of type `Int!`
+  """
+  artifactsDiscovered_count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`authorId_count` of type `Int!`
+  """
+  authorId_count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`bookmarks_count` of type `Int!`
+  """
+  bookmarks_count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`campaignId_count` of type `Int!`
+  """
+  campaignId_count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`companions_count` of type `Int!`
+  """
+  companions_count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`completed_count` of type `Int!`
+  """
+  completed_count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`destinationId_count` of type `Int!`
+  """
+  destinationId_count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`difficultyId_count` of type `Int!`
+  """
+  difficultyId_count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`interestId_count` of type `Int!`
+  """
+  interestId_count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`isPublic_count` of type `Int!`
+  """
+  isPublic_count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`itinerary_count` of type `Int!`
+  """
+  itinerary_count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`likes_count` of type `Int!`
+  """
+  likes_count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`loreExcerpt_count` of type `Int!`
+  """
+  loreExcerpt_count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`mediaUrls_count` of type `Int!`
+  """
+  mediaUrls_count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`name_count` of type `Int!`
+  """
+  name_count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`questGiver_count` of type `Int!`
+  """
+  questGiver_count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`questTypeId_count` of type `Int!`
+  """
+  questTypeId_count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`reward_count` of type `Int!`
+  """
+  reward_count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`startLocationId_count` of type `Int!`
+  """
+  startLocationId_count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`synopsis_count` of type `Int!`
+  """
+  synopsis_count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`tags_count` of type `Int!`
+  """
+  tags_count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`updatedAt_count` of type `Int!`
+  """
+  updatedAt_count: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`bookmarks_sum` of type `Int`
+  """
+  bookmarks_sum: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`likes_sum` of type `Int`
+  """
+  likes_sum: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`bookmarks_avg` of type `Float`
+  """
+  bookmarks_avg: Float_Filter
+  """
+  ✨ Generated from Field `Quest`.`likes_avg` of type `Float`
+  """
+  likes_avg: Float_Filter
+  """
+  ✨ Generated from Field `Quest`.`bookmarks_min` of type `Int`
+  """
+  bookmarks_min: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Quest`.`likes_min` of type `Int`
+  """
+  likes_min: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`updatedAt_min` of type `Timestamp`
+  """
+  updatedAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Quest`.`bookmarks_max` of type `Int`
+  """
+  bookmarks_max: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `Quest`.`likes_max` of type `Int`
+  """
+  likes_max: Int_Filter
+  """
+  ✨ Generated from Field `Quest`.`updatedAt_max` of type `Timestamp`
+  """
+  updatedAt_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'Quest'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Quest_Key {
+  """
+  ✨ Generated from Field `Quest`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Quest`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+}
+"""
+✨ Generated list filter input type for table 'Quest'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Quest_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Quest_Filter
+}
+"""
+✨ Generated order input type for table 'Quest'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Quest_Order {
+  """
+  ✨ Generated from Field `Quest`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Quest`.`authorId` of type `UUID`
+  """
+  authorId: OrderDirection
+  """
+  ✨ Generated from Field `Quest`.`campaignId` of type `UUID`
+  """
+  campaignId: OrderDirection
+  """
+  ✨ Generated from Field `Quest`.`destinationId` of type `UUID`
+  """
+  destinationId: OrderDirection
+  """
+  ✨ Generated from Field `Quest`.`difficultyId` of type `UUID!`
+  """
+  difficultyId: OrderDirection
+  """
+  ✨ Generated from Field `Quest`.`interestId` of type `UUID!`
+  """
+  interestId: OrderDirection
+  """
+  ✨ Generated from Field `Quest`.`questTypeId` of type `UUID!`
+  """
+  questTypeId: OrderDirection
+  """
+  ✨ Generated from Field `Quest`.`startLocationId` of type `UUID!`
+  """
+  startLocationId: OrderDirection
+  """
+  ✨ Generated from Field `Quest`.`author` of type `User`
+  """
+  author: User_Order
+  """
+  ✨ Generated from Field `Quest`.`campaign` of type `Campaign`
+  """
+  campaign: Campaign_Order
+  """
+  ✨ Generated from Field `Quest`.`destination` of type `Location`
+  """
+  destination: Location_Order
+  """
+  ✨ Generated from Field `Quest`.`difficulty` of type `Difficulty!`
+  """
+  difficulty: Difficulty_Order
+  """
+  ✨ Generated from Field `Quest`.`interest` of type `Interest!`
+  """
+  interest: Interest_Order
+  """
+  ✨ Generated from Field `Quest`.`questType` of type `QuestType!`
+  """
+  questType: QuestType_Order
+  """
+  ✨ Generated from Field `Quest`.`startLocation` of type `Location!`
+  """
+  startLocation: Location_Order
+  """
+  ✨ Generated from Field `Quest`.`artifactsDiscovered` of type `String`
+  """
+  artifactsDiscovered: OrderDirection
+  """
+  ✨ Generated from Field `Quest`.`bookmarks` of type `Int`
+  """
+  bookmarks: OrderDirection
+  """
+  ✨ Generated from Field `Quest`.`companions` of type `String`
+  """
+  companions: OrderDirection
+  """
+  ✨ Generated from Field `Quest`.`completed` of type `Boolean`
+  """
+  completed: OrderDirection
+  """
+  ✨ Generated from Field `Quest`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: OrderDirection
+  """
+  ✨ Generated from Field `Quest`.`isPublic` of type `Boolean!`
+  """
+  isPublic: OrderDirection
+  """
+  ✨ Generated from Field `Quest`.`itinerary` of type `String`
+  """
+  itinerary: OrderDirection
+  """
+  ✨ Generated from Field `Quest`.`likes` of type `Int`
+  """
+  likes: OrderDirection
+  """
+  ✨ Generated from Field `Quest`.`loreExcerpt` of type `String`
+  """
+  loreExcerpt: OrderDirection
+  """
+  ✨ Generated from Field `Quest`.`mediaUrls` of type `String`
+  """
+  mediaUrls: OrderDirection
+  """
+  ✨ Generated from Field `Quest`.`name` of type `String!`
+  """
+  name: OrderDirection
+  """
+  ✨ Generated from Field `Quest`.`questGiver` of type `String`
+  """
+  questGiver: OrderDirection
+  """
+  ✨ Generated from Field `Quest`.`reward` of type `String`
+  """
+  reward: OrderDirection
+  """
+  ✨ Generated from Field `Quest`.`synopsis` of type `String!`
+  """
+  synopsis: OrderDirection
+  """
+  ✨ Generated from Field `Quest`.`tags` of type `String`
+  """
+  tags: OrderDirection
+  """
+  ✨ Generated from Field `Quest`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: OrderDirection
+}
+"""
+✨ Generated data input type for table 'QuestType'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input QuestType_Data {
+  """
+  ✨ Generated from Field `QuestType`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `QuestType`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+  """
+  ✨ Generated from Field `QuestType`.`name` of type `String!`
+  """
+  name: String
+  """
+  ✨ `_expr` server value variant of `name` (✨ Generated from Field `QuestType`.`name` of type `String!`)
+  """
+  name_expr: String_Expr
+}
+"""
+✨ Generated filter input type for table 'QuestType'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input QuestType_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [QuestType_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: QuestType_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [QuestType_Filter!]
+  """
+  ✨ Generated from Field `QuestType`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `QuestType`.`name` of type `String!`
+  """
+  name: String_Filter
+  """
+  ✨ Generated from Field `QuestType`.`quests_on_questType` of type `[Quest!]!`
+  """
+  quests_on_questType: Quest_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'QuestType'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input QuestType_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [QuestType_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: QuestType_Filter
+}
+"""
+✨ Generated having input type for table 'QuestType'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input QuestType_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [QuestType_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: QuestType_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [QuestType_Having!]
+  """
+  ✨ Generated from Field `QuestType`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `QuestType`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `QuestType`.`name_count` of type `Int!`
+  """
+  name_count: Int_Filter
+}
+"""
+✨ Generated key input type for table 'QuestType'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input QuestType_Key {
+  """
+  ✨ Generated from Field `QuestType`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `QuestType`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+}
+"""
+✨ Generated list filter input type for table 'QuestType'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input QuestType_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: QuestType_Filter
+}
+"""
+✨ Generated order input type for table 'QuestType'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input QuestType_Order {
+  """
+  ✨ Generated from Field `QuestType`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `QuestType`.`name` of type `String!`
+  """
+  name: OrderDirection
+}
+"""
+✨ Generated data input type for table 'User'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input User_Data {
+  """
+  ✨ Generated from Field `User`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `User`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+  """
+  ✨ Generated from Field `User`.`avatarUrl` of type `String`
+  """
+  avatarUrl: String
+  """
+  ✨ `_expr` server value variant of `avatarUrl` (✨ Generated from Field `User`.`avatarUrl` of type `String`)
+  """
+  avatarUrl_expr: String_Expr
+  """
+  ✨ Generated from Field `User`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `createdAt` (✨ Generated from Field `User`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `createdAt` (✨ Generated from Field `User`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_time: Timestamp_Relative
+  """
+  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `User`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_update: [Timestamp_Update!]
+  """
+  ✨ Generated from Field `User`.`displayName` of type `String!`
+  """
+  displayName: String
+  """
+  ✨ `_expr` server value variant of `displayName` (✨ Generated from Field `User`.`displayName` of type `String!`)
+  """
+  displayName_expr: String_Expr
+  """
+  ✨ Generated from Field `User`.`email` of type `String`
+  """
+  email: String
+  """
+  ✨ `_expr` server value variant of `email` (✨ Generated from Field `User`.`email` of type `String`)
+  """
+  email_expr: String_Expr
+}
+"""
+✨ Generated filter input type for table 'User'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input User_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [User_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: User_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [User_Filter!]
+  """
+  ✨ Generated from Field `User`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `User`.`avatarUrl` of type `String`
+  """
+  avatarUrl: String_Filter
+  """
+  ✨ Generated from Field `User`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `User`.`displayName` of type `String!`
+  """
+  displayName: String_Filter
+  """
+  ✨ Generated from Field `User`.`email` of type `String`
+  """
+  email: String_Filter
+  """
+  ✨ Generated from Field `User`.`campaigns_on_creator` of type `[Campaign!]!`
+  """
+  campaigns_on_creator: Campaign_ListFilter
+  """
+  ✨ Generated from Field `User`.`quests_on_author` of type `[Quest!]!`
+  """
+  quests_on_author: Quest_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'User'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input User_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [User_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: User_Filter
+}
+"""
+✨ Generated having input type for table 'User'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input User_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [User_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: User_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [User_Having!]
+  """
+  ✨ Generated from Field `User`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`avatarUrl_count` of type `Int!`
+  """
+  avatarUrl_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`displayName_count` of type `Int!`
+  """
+  displayName_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`email_count` of type `Int!`
+  """
+  email_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `User`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'User'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input User_Key {
+  """
+  ✨ Generated from Field `User`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `User`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+}
+"""
+✨ Generated list filter input type for table 'User'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input User_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: User_Filter
+}
+"""
+✨ Generated order input type for table 'User'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input User_Order {
+  """
+  ✨ Generated from Field `User`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `User`.`avatarUrl` of type `String`
+  """
+  avatarUrl: OrderDirection
+  """
+  ✨ Generated from Field `User`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: OrderDirection
+  """
+  ✨ Generated from Field `User`.`displayName` of type `String!`
+  """
+  displayName: OrderDirection
+  """
+  ✨ Generated from Field `User`.`email` of type `String`
+  """
+  email: OrderDirection
+}

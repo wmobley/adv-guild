@@ -1,0 +1,12 @@
+specVersion: "v1"
+serviceId: "adventurer-guild-ikihm-service"
+location: "us-central1"
+schema:
+  source: "./schema"
+  datasource:
+    postgresql:
+      database: "adventurer-guild-ikihm-database"
+      cloudSql:
+        instanceId: "adventurer-guild-ikihm-instance"
+      # schemaValidation: "COMPATIBLE"
+connectorDirs: ["./connector"]

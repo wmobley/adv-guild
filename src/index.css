@@ -1,2 +1,130 @@
 @import "tailwindcss";
 
+:root {
+  --guild-primary: #2F4F4F;
+  --guild-secondary: #F5E8C7;
+  --guild-accent: #B85C38;
+  --guild-neutral: #6C757D;
+  --guild-text: #343A40;
+  --guild-highlight: #DAA520;
+}
+
+/* Background Colors */
+.bg-guild-primary { background-color: var(--guild-primary); }
+.bg-guild-secondary { background-color: var(--guild-secondary); }
+.bg-guild-accent { background-color: var(--guild-accent); }
+.bg-guild-neutral { background-color: var(--guild-neutral); }
+.bg-guild-highlight { background-color: var(--guild-highlight); }
+
+/* Background Colors with Opacity */
+.bg-guild-primary\/10 { background-color: rgba(47, 79, 79, 0.1); }
+.bg-guild-primary\/20 { background-color: rgba(47, 79, 79, 0.2); }
+.bg-guild-primary\/30 { background-color: rgba(47, 79, 79, 0.3); }
+.bg-guild-primary\/50 { background-color: rgba(47, 79, 79, 0.5); }
+.bg-guild-primary\/70 { background-color: rgba(47, 79, 79, 0.7); }
+.bg-guild-primary\/90 { background-color: rgba(47, 79, 79, 0.9); }
+
+.bg-guild-secondary\/10 { background-color: rgba(245, 232, 199, 0.1); }
+.bg-guild-secondary\/20 { background-color: rgba(245, 232, 199, 0.2); }
+.bg-guild-secondary\/30 { background-color: rgba(245, 232, 199, 0.3); }
+.bg-guild-secondary\/50 { background-color: rgba(245, 232, 199, 0.5); }
+.bg-guild-secondary\/70 { background-color: rgba(245, 232, 199, 0.7); }
+.bg-guild-secondary\/90 { background-color: rgba(245, 232, 199, 0.9); }
+
+.bg-guild-accent\/10 { background-color: rgba(184, 92, 56, 0.1); }
+.bg-guild-accent\/20 { background-color: rgba(184, 92, 56, 0.2); }
+.bg-guild-accent\/30 { background-color: rgba(184, 92, 56, 0.3); }
+.bg-guild-accent\/50 { background-color: rgba(184, 92, 56, 0.5); }
+.bg-guild-accent\/70 { background-color: rgba(184, 92, 56, 0.7); }
+.bg-guild-accent\/90 { background-color: rgba(184, 92, 56, 0.9); }
+
+.bg-guild-highlight\/10 { background-color: rgba(218, 165, 32, 0.1); }
+.bg-guild-highlight\/20 { background-color: rgba(218, 165, 32, 0.2); }
+.bg-guild-highlight\/30 { background-color: rgba(218, 165, 32, 0.3); }
+.bg-guild-highlight\/50 { background-color: rgba(218, 165, 32, 0.5); }
+.bg-guild-highlight\/70 { background-color: rgba(218, 165, 32, 0.7); }
+.bg-guild-highlight\/90 { background-color: rgba(218, 165, 32, 0.9); }
+
+/* Text Colors */
+.text-guild-primary { color: var(--guild-primary); }
+.text-guild-secondary { color: var(--guild-secondary); }
+.text-guild-accent { color: var(--guild-accent); }
+.text-guild-neutral { color: var(--guild-neutral); }
+.text-guild-text { color: var(--guild-text); }
+.text-guild-highlight { color: var(--guild-highlight); }
+
+/* Border Colors */
+.border-guild-primary { border-color: var(--guild-primary); }
+.border-guild-secondary { border-color: var(--guild-secondary); }
+.border-guild-accent { border-color: var(--guild-accent); }
+.border-guild-neutral { border-color: var(--guild-neutral); }
+.border-guild-highlight { border-color: var(--guild-highlight); }
+
+/* Border Colors with Opacity */
+.border-guild-primary\/20 { border-color: rgba(47, 79, 79, 0.2); }
+.border-guild-primary\/30 { border-color: rgba(47, 79, 79, 0.3); }
+.border-guild-primary\/40 { border-color: rgba(47, 79, 79, 0.4); }
+.border-guild-primary\/50 { border-color: rgba(47, 79, 79, 0.5); }
+
+.border-guild-secondary\/20 { border-color: rgba(245, 232, 199, 0.2); }
+.border-guild-secondary\/30 { border-color: rgba(245, 232, 199, 0.3); }
+.border-guild-secondary\/40 { border-color: rgba(245, 232, 199, 0.4); }
+.border-guild-secondary\/50 { border-color: rgba(245, 232, 199, 0.5); }
+
+.border-guild-accent\/20 { border-color: rgba(184, 92, 56, 0.2); }
+.border-guild-accent\/30 { border-color: rgba(184, 92, 56, 0.3); }
+.border-guild-accent\/40 { border-color: rgba(184, 92, 56, 0.4); }
+.border-guild-accent\/50 { border-color: rgba(184, 92, 56, 0.5); }
+
+.border-guild-highlight\/20 { border-color: rgba(218, 165, 32, 0.2); }
+.border-guild-highlight\/30 { border-color: rgba(218, 165, 32, 0.3); }
+.border-guild-highlight\/40 { border-color: rgba(218, 165, 32, 0.4); }
+.border-guild-highlight\/50 { border-color: rgba(218, 165, 32, 0.5); }
+
+/* Hover States */
+.hover\:bg-guild-primary:hover { background-color: var(--guild-primary); }
+.hover\:bg-guild-accent:hover { background-color: var(--guild-accent); }
+.hover\:bg-guild-secondary:hover { background-color: var(--guild-secondary); }
+.hover\:bg-guild-highlight:hover { background-color: var(--guild-highlight); }
+
+.hover\:bg-guild-primary\/90:hover { background-color: rgba(47, 79, 79, 0.9); }
+.hover\:bg-guild-accent\/90:hover { background-color: rgba(184, 92, 56, 0.9); }
+.hover\:bg-guild-secondary\/90:hover { background-color: rgba(245, 232, 199, 0.9); }
+.hover\:bg-guild-highlight\/90:hover { background-color: rgba(218, 165, 32, 0.9); }
+
+.hover\:text-guild-primary:hover { color: var(--guild-primary); }
+.hover\:text-guild-accent:hover { color: var(--guild-accent); }
+.hover\:text-guild-secondary:hover { color: var(--guild-secondary); }
+.hover\:text-guild-highlight:hover { color: var(--guild-highlight); }
+
+.hover\:border-guild-primary:hover { border-color: var(--guild-primary); }
+.hover\:border-guild-accent:hover { border-color: var(--guild-accent); }
+.hover\:border-guild-secondary:hover { border-color: var(--guild-secondary); }
+.hover\:border-guild-highlight:hover { border-color: var(--guild-highlight); }
+
+.hover\:border-guild-primary\/50:hover { border-color: rgba(47, 79, 79, 0.5); }
+.hover\:border-guild-accent\/50:hover { border-color: rgba(184, 92, 56, 0.5); }
+.hover\:border-guild-highlight\/50:hover { border-color: rgba(218, 165, 32, 0.5); }
+
+/* Gradients */
+.from-guild-primary { --tw-gradient-from: var(--guild-primary); }
+.from-guild-secondary { --tw-gradient-from: var(--guild-secondary); }
+.from-guild-accent { --tw-gradient-from: var(--guild-accent); }
+.from-guild-highlight { --tw-gradient-from: var(--guild-highlight); }
+
+.to-guild-primary { --tw-gradient-to: var(--guild-primary); }
+.to-guild-secondary { --tw-gradient-to: var(--guild-secondary); }
+.to-guild-accent { --tw-gradient-to: var(--guild-accent); }
+.to-guild-highlight { --tw-gradient-to: var(--guild-highlight); }
+
+/* Gradient with Opacity */
+.from-guild-secondary\/70 { --tw-gradient-from: rgba(245, 232, 199, 0.7); }
+.to-guild-secondary\/30 { --tw-gradient-to: rgba(245, 232, 199, 0.3); }
+.from-guild-highlight\/20 { --tw-gradient-from: rgba(218, 165, 32, 0.2); }
+.to-guild-accent\/20 { --tw-gradient-to: rgba(184, 92, 56, 0.2); }
+
+/* Focus States */
+.focus\:border-guild-highlight:focus { border-color: var(--guild-highlight); }
+.focus\:ring-guild-highlight:focus { --tw-ring-color: var(--guild-highlight); }
+.focus\:ring-guild-accent:focus { --tw-ring-color: var(--guild-accent); }
+.focus\:ring-guild-primary:focus { --tw-ring-color: var(--guild-primary); }

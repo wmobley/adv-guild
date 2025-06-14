@@ -1,0 +1,74 @@
+extend type Campaign {
+  """
+  ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
+  """
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Campaign", purpose: IMPLICIT_KEY_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Campaign`.`creator`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  creatorId: UUID @fdc_generated(from: "Campaign.creator", purpose: IMPLICIT_REF_FIELD)
+}
+extend type Difficulty {
+  """
+  ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
+  """
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Difficulty", purpose: IMPLICIT_KEY_FIELD)
+}
+extend type Interest {
+  """
+  ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
+  """
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Interest", purpose: IMPLICIT_KEY_FIELD)
+}
+extend type Location {
+  """
+  ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
+  """
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Location", purpose: IMPLICIT_KEY_FIELD)
+}
+extend type Quest {
+  """
+  ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
+  """
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Quest", purpose: IMPLICIT_KEY_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Quest`.`author`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  authorId: UUID @fdc_generated(from: "Quest.author", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Quest`.`campaign`. It must match the value of `Campaign`.`id`. See `@ref` for how to customize it.
+  """
+  campaignId: UUID @fdc_generated(from: "Quest.campaign", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Quest`.`destination`. It must match the value of `Location`.`id`. See `@ref` for how to customize it.
+  """
+  destinationId: UUID @fdc_generated(from: "Quest.destination", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Quest`.`difficulty`. It must match the value of `Difficulty`.`id`. See `@ref` for how to customize it.
+  """
+  difficultyId: UUID! @fdc_generated(from: "Quest.difficulty", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Quest`.`interest`. It must match the value of `Interest`.`id`. See `@ref` for how to customize it.
+  """
+  interestId: UUID! @fdc_generated(from: "Quest.interest", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Quest`.`questType`. It must match the value of `QuestType`.`id`. See `@ref` for how to customize it.
+  """
+  questTypeId: UUID! @fdc_generated(from: "Quest.questType", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Quest`.`startLocation`. It must match the value of `Location`.`id`. See `@ref` for how to customize it.
+  """
+  startLocationId: UUID! @fdc_generated(from: "Quest.startLocation", purpose: IMPLICIT_REF_FIELD)
+}
+extend type QuestType {
+  """
+  ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
+  """
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "QuestType", purpose: IMPLICIT_KEY_FIELD)
+}
+extend type User {
+  """
+  ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
+  """
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "User", purpose: IMPLICIT_KEY_FIELD)
+}

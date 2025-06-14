@@ -1,0 +1,892 @@
+extend type Campaign {
+  """
+  ✨ List `Quest` objects in a one-to-many relationship (where `Quest`.`campaign` is this object).
+  """
+  quests_on_campaign(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Quest_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Quest_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Quest_Having
+  ): [Quest!]! @fdc_generated(from: "Quest.campaign", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Campaign", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `Campaign` table.
+  """
+  _count: Int! @fdc_generated(from: "Campaign", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Campaign` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Campaign.createdAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Campaign` table where the `creatorId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  creatorId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Campaign.creatorId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Campaign` table where the `description` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  description_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Campaign.description", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Campaign` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  id_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Campaign.id", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Campaign` table where the `title` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  title_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Campaign.title", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `createdAt` field in the `Campaign` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "Campaign.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `Campaign` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "Campaign.createdAt", purpose: QUERY_MAX)
+}
+extend type Difficulty {
+  """
+  ✨ List `Quest` objects in a one-to-many relationship (where `Quest`.`difficulty` is this object).
+  """
+  quests_on_difficulty(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Quest_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Quest_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Quest_Having
+  ): [Quest!]! @fdc_generated(from: "Quest.difficulty", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Difficulty", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `Difficulty` table.
+  """
+  _count: Int! @fdc_generated(from: "Difficulty", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Difficulty` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  id_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Difficulty.id", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Difficulty` table where the `name` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  name_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Difficulty.name", purpose: QUERY_COUNT)
+}
+extend type Interest {
+  """
+  ✨ List `Quest` objects in a one-to-many relationship (where `Quest`.`interest` is this object).
+  """
+  quests_on_interest(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Quest_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Quest_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Quest_Having
+  ): [Quest!]! @fdc_generated(from: "Quest.interest", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Interest", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `Interest` table.
+  """
+  _count: Int! @fdc_generated(from: "Interest", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Interest` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  id_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Interest.id", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Interest` table where the `name` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  name_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Interest.name", purpose: QUERY_COUNT)
+}
+extend type Location {
+  """
+  ✨ List `Quest` objects in a one-to-many relationship (where `Quest`.`destination` is this object).
+  """
+  quests_on_destination(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Quest_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Quest_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Quest_Having
+  ): [Quest!]! @fdc_generated(from: "Quest.destination", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `Quest` objects in a one-to-many relationship (where `Quest`.`startLocation` is this object).
+  """
+  quests_on_startLocation(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Quest_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Quest_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Quest_Having
+  ): [Quest!]! @fdc_generated(from: "Quest.startLocation", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Location", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `Location` table.
+  """
+  _count: Int! @fdc_generated(from: "Location", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Location` table where the `description` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  description_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Location.description", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Location` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  id_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Location.id", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Location` table where the `latitude` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  latitude_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Location.latitude", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Location` table where the `longitude` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  longitude_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Location.longitude", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Location` table where the `name` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  name_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Location.name", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Location` table where the `realWorldInspiration` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  realWorldInspiration_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Location.realWorldInspiration", purpose: QUERY_COUNT)
+  """
+  ✨ Sum the `latitude` field in the `Location` table.
+  """
+  latitude_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Location.latitude", purpose: QUERY_SUM)
+  """
+  ✨ Sum the `longitude` field in the `Location` table.
+  """
+  longitude_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Location.longitude", purpose: QUERY_SUM)
+  """
+  ✨ Average the `latitude` field in the `Location` table.
+  """
+  latitude_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Location.latitude", purpose: QUERY_AVG)
+  """
+  ✨ Average the `longitude` field in the `Location` table.
+  """
+  longitude_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Location.longitude", purpose: QUERY_AVG)
+  """
+  ✨ Minimum of the `latitude` field in the `Location` table.
+  """
+  latitude_min: Float @fdc_generated(from: "Location.latitude", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `longitude` field in the `Location` table.
+  """
+  longitude_min: Float @fdc_generated(from: "Location.longitude", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `latitude` field in the `Location` table.
+  """
+  latitude_max: Float @fdc_generated(from: "Location.latitude", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `longitude` field in the `Location` table.
+  """
+  longitude_max: Float @fdc_generated(from: "Location.longitude", purpose: QUERY_MAX)
+}
+extend type Quest {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Quest", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `Quest` table.
+  """
+  _count: Int! @fdc_generated(from: "Quest", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Quest` table where the `artifactsDiscovered` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  artifactsDiscovered_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Quest.artifactsDiscovered", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Quest` table where the `authorId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  authorId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Quest.authorId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Quest` table where the `bookmarks` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  bookmarks_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Quest.bookmarks", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Quest` table where the `campaignId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  campaignId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Quest.campaignId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Quest` table where the `companions` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  companions_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Quest.companions", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Quest` table where the `completed` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  completed_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Quest.completed", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Quest` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Quest.createdAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Quest` table where the `destinationId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  destinationId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Quest.destinationId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Quest` table where the `difficultyId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  difficultyId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Quest.difficultyId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Quest` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  id_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Quest.id", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Quest` table where the `interestId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  interestId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Quest.interestId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Quest` table where the `isPublic` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  isPublic_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Quest.isPublic", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Quest` table where the `itinerary` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  itinerary_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Quest.itinerary", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Quest` table where the `likes` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  likes_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Quest.likes", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Quest` table where the `loreExcerpt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  loreExcerpt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Quest.loreExcerpt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Quest` table where the `mediaUrls` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  mediaUrls_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Quest.mediaUrls", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Quest` table where the `name` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  name_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Quest.name", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Quest` table where the `questGiver` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  questGiver_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Quest.questGiver", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Quest` table where the `questTypeId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  questTypeId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Quest.questTypeId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Quest` table where the `reward` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  reward_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Quest.reward", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Quest` table where the `startLocationId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  startLocationId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Quest.startLocationId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Quest` table where the `synopsis` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  synopsis_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Quest.synopsis", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Quest` table where the `tags` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  tags_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Quest.tags", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Quest` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  updatedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Quest.updatedAt", purpose: QUERY_COUNT)
+  """
+  ✨ Sum the `bookmarks` field in the `Quest` table.
+  """
+  bookmarks_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int @fdc_generated(from: "Quest.bookmarks", purpose: QUERY_SUM)
+  """
+  ✨ Sum the `likes` field in the `Quest` table.
+  """
+  likes_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int @fdc_generated(from: "Quest.likes", purpose: QUERY_SUM)
+  """
+  ✨ Average the `bookmarks` field in the `Quest` table.
+  """
+  bookmarks_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Quest.bookmarks", purpose: QUERY_AVG)
+  """
+  ✨ Average the `likes` field in the `Quest` table.
+  """
+  likes_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Quest.likes", purpose: QUERY_AVG)
+  """
+  ✨ Minimum of the `bookmarks` field in the `Quest` table.
+  """
+  bookmarks_min: Int @fdc_generated(from: "Quest.bookmarks", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `createdAt` field in the `Quest` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "Quest.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `likes` field in the `Quest` table.
+  """
+  likes_min: Int @fdc_generated(from: "Quest.likes", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `updatedAt` field in the `Quest` table.
+  """
+  updatedAt_min: Timestamp @fdc_generated(from: "Quest.updatedAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `bookmarks` field in the `Quest` table.
+  """
+  bookmarks_max: Int @fdc_generated(from: "Quest.bookmarks", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `createdAt` field in the `Quest` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "Quest.createdAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `likes` field in the `Quest` table.
+  """
+  likes_max: Int @fdc_generated(from: "Quest.likes", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `updatedAt` field in the `Quest` table.
+  """
+  updatedAt_max: Timestamp @fdc_generated(from: "Quest.updatedAt", purpose: QUERY_MAX)
+}
+extend type QuestType {
+  """
+  ✨ List `Quest` objects in a one-to-many relationship (where `Quest`.`questType` is this object).
+  """
+  quests_on_questType(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Quest_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Quest_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Quest_Having
+  ): [Quest!]! @fdc_generated(from: "Quest.questType", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "QuestType", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `QuestType` table.
+  """
+  _count: Int! @fdc_generated(from: "QuestType", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `QuestType` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  id_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "QuestType.id", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `QuestType` table where the `name` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  name_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "QuestType.name", purpose: QUERY_COUNT)
+}
+extend type User {
+  """
+  ✨ List `Campaign` objects in a one-to-many relationship (where `Campaign`.`creator` is this object).
+  """
+  campaigns_on_creator(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Campaign_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Campaign_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Campaign_Having
+  ): [Campaign!]! @fdc_generated(from: "Campaign.creator", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `Quest` objects in a one-to-many relationship (where `Quest`.`author` is this object).
+  """
+  quests_on_author(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Quest_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Quest_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Quest_Having
+  ): [Quest!]! @fdc_generated(from: "Quest.author", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "User", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `User` table.
+  """
+  _count: Int! @fdc_generated(from: "User", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `avatarUrl` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  avatarUrl_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.avatarUrl", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.createdAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `displayName` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  displayName_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.displayName", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `email` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  email_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.email", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  id_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.id", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `createdAt` field in the `User` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "User.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `User` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "User.createdAt", purpose: QUERY_MAX)
+}
