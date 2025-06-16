@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Header from '../components/Header';
 // import QuestCard from '../components/QuestCard'; // Assuming you want to reuse QuestCard
 
 // Placeholder data for user's saved quests - replace with actual data fetching
@@ -12,6 +13,7 @@ const userQuests = [
 const MyQuestsPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-guild-secondary to-white">
+      <Header/>
       <div className="max-w-7xl mx-auto px-4 py-12">
         <header className="text-center mb-12">
           <h1 className="text-5xl font-bold text-guild-primary mb-4">My Quests</h1>

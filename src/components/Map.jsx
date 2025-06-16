@@ -5,7 +5,7 @@ import "leaflet/dist/leaflet.css";
 import 'leaflet-defaulticon-compatibility';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 
-const locations = [
+const defaultLocations = [
   {
     name: "O. Henry Museum",
     description: "Home of America's twist-ending master.",
@@ -43,9 +43,21 @@ const locations = [
   },
 ];
 
-export default function Map() {
+export default function Map({ 
+  locations = defaultLocations, 
+  center = [34.5, -92.5], 
+  zoom = 6, 
+  mapId = "myth-map",
+  height = "400px"
+}) {
   useEffect(() => {
-    const map = L.map("myth-map").setView([34.5, -92.5], 6);
+    // Remove existing map if it exists
+    const existingMap = document.getElementById(mapId);
+    if (existingMap && existingMap._leaflet_id) {
+      existingMap._leaflet_id = null;
+    }
+
+    const map = L.map(mapId).setView(center, zoom);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "&copy; OpenStreetMap contributors",
@@ -59,16 +71,18 @@ export default function Map() {
       bounds.push(loc.coords);
     });
 
-    map.fitBounds(bounds, { padding: [50, 50] });
+    if (bounds.length > 1) {
+      map.fitBounds(bounds, { padding: [50, 50] });
+    }
 
     return () => {
       map.remove(); // Cleanup
     };
-  }, []);
+  }, [locations, center, zoom, mapId]);
 
   return (
     <div className="rounded-lg shadow-md overflow-hidden">
-      <div id="myth-map" className="w-full h-[400px] z-0 rounded-xl" />
+      <div id={mapId} className="w-full z-0 rounded-xl" style={{ height }} />
     </div>
   );
 }

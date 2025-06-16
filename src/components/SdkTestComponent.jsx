@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 // Assuming your SDK generates a function named 'getPublicQuests' for your query
-import { getPublicQuests } from '@firebasegen/adv-guild-backend-connector';
+import { getPointOfInterests } from '@firebasegen/adv-guild-backend-connector';
 
 function SdkTestComponent() {
   const [data, setData] = useState(null);
@@ -12,7 +12,7 @@ function SdkTestComponent() {
       try {
         setLoading(true);
         // Calling the getPublicQuests function from your SDK
-        const result = await getPublicQuests(); // Add arguments if your query/SDK function expects them
+        const result = await getPointOfInterests(); // Add arguments if your query/SDK function expects them
         setData(result);
         setError(null);
       } catch (err) {

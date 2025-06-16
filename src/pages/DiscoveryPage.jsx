@@ -21,7 +21,7 @@ const savedQuests = [
 const DiscoveryPage = () => {
   return (
     <>
-      <Header />
+    <Header/>
       <div className="min-h-screen bg-gradient-to-br from-guild-secondary to-white">
         <div className="max-w-7xl mx-auto px-4 py-12 space-y-12">
           <header className="text-center mb-12">

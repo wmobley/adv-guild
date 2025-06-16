@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 // import { getQuestById } from '@firebasegen/adv-guild-backend-connector'; // Placeholder for your SDK function
-
+import Header from '../components/Header';
 // Placeholder quest data - replace with actual data fetching
 const placeholderQuests = {
   q1: { id: 'q1', name: 'The Whispering Peaks', synopsis: 'An adventurous trek through alpine wonders.', startLocation: { name: 'Alpine Village', lat: 46.59, lng: 7.90 }, difficulty: { name: 'Challenging' }, interest: { name: 'Hiking' }, questType: { name: 'Exploration' }, itinerary: ['Day 1: Arrive at Alpine Village, check into lodge.', 'Day 2: Hike to Eagle Point.', 'Day 3: Explore the Crystal Caves.', 'Day 4: Return journey.'] },
@@ -69,6 +69,7 @@ const ItineraryPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-guild-secondary to-white">
+      <Header />
       <div className="max-w-4xl mx-auto px-4 py-12">
         <header className="mb-10">
           <Link 
