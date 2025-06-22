@@ -273,6 +273,35 @@ const parseJWT = (token) => {
   }
 };
 
+const updateQuest = async (questId, updateData) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/quests/${questId}`, {
+      method: 'PUT', // or 'PATCH' depending on your API
+      headers: {
+        'Content-Type': 'application/json',
+        // Add any authentication headers if needed
+      },
+      body: JSON.stringify(updateData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error updating quest:', error);
+    throw error;
+  }
+};
+
+export const getOwnedQuests = async () => {
+  console.log('👑 Getting owned quests');
+  const data = await request('/users/me/quests');
+  return data || [];
+};
+
 const apiClient = { 
   loginUser, 
   registerUser, 
@@ -287,7 +316,9 @@ const apiClient = {
   createLocation, 
   getDifficulties, 
   getInterests,
-  debugAuth
+  debugAuth,
+  getOwnedQuests,
+  updateQuest
 };
 
 export default apiClient;

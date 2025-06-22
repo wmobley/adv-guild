@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import QuestForm from '../components/QuestForm';
-import QuestMap from '../components/QuestMap';
-import QuestRoute from '../components/QuestRoute';
+import QuestItineraryBuilder from '../components/QuestItineraryBuilder';
 import QuestTips from '../components/QuestTips';
 import Header from '../components/Header';
 import apiClient from '../services/advGuildApiClient';
@@ -11,21 +10,19 @@ const CreateQuestPage = () => {
   const navigate = useNavigate();
 
   // State for the quest creation process
-  const [mapLocations, setMapLocations] = useState([]); // This is the quest route
-  const [showMap, setShowMap] = useState(false);
-  const [mapCenter, setMapCenter] = useState([34.5, -92.5]); // Default center
-  const [isLoadingLocation, setIsLoadingLocation] = useState(false); // Placeholder
-  const [suggestedPois, setSuggestedPois] = useState([]); // Placeholder
-  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false); // Placeholder
-  const [selectedPoi, setSelectedPoi] = useState(null);
-  const [showPoiForm, setShowPoiForm] = useState(false);
   const [startingLocation, setStartingLocation] = useState(null); // Store starting location without adding to map
+  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
 
   // State for reference data like difficulties and interests
   const [difficulties, setDifficulties] = useState([]);
   const [interests, setInterests] = useState([]);
   const [questTypes, setQuestTypes] = useState([]);
   const [isLoadingReferenceData, setIsLoadingReferenceData] = useState(true);
+
+  // New state for quest creation flow
+  const [createdQuest, setCreatedQuest] = useState(null);
+  const [isQuestCreated, setIsQuestCreated] = useState(false);
+  const [isCreatingQuest, setIsCreatingQuest] = useState(false);
 
   // Fetch reference data on component mount
   useEffect(() => {
@@ -77,29 +74,6 @@ const CreateQuestPage = () => {
     fetchReferenceData();
   }, []); // Empty dependency array ensures this runs only once on mount
 
-  // Debug log when state changes
-  useEffect(() => {
-    console.log('Difficulties state updated:', difficulties);
-  }, [difficulties]);
-
-  useEffect(() => {
-    console.log('Interests state updated:', interests);
-  }, [interests]);
-
-  useEffect(() => {
-    console.log('Quest types state updated:', questTypes);
-  }, [questTypes]);
-
-  // --- Action Handlers ---
-
-  // Called from QuestMap after a new location is created via the API
-  const handleAddPointOfInterest = (newLocation) => {
-    setMapLocations(prevLocations => [...prevLocations, { ...newLocation, day: 1 }]);
-    if (!showMap) {
-      setShowMap(true);
-    }
-  };
-
   const handleSetInitialLocation = async (locationData) => {
     // locationData comes from LocationForm's onLocationSelect
     // e.g., { formatted: '...', lat: '...', lon: '...', display_name: '...' }
@@ -116,7 +90,6 @@ const CreateQuestPage = () => {
       
       // Store the starting location but don't add to map or show map yet
       setStartingLocation(createdLocation);
-      setMapCenter([createdLocation.latitude, createdLocation.longitude]);
 
     } catch (error) {
       console.error("Failed to set initial location:", error);
@@ -126,51 +99,55 @@ const CreateQuestPage = () => {
     }
   };
 
-  // Main quest submission handler, passed to QuestForm
+  // Initial quest creation handler - creates quest with basic info
   const handleCreateQuest = async (formData) => {
     console.log('handleCreateQuest called with:', formData);
     console.log('startingLocation:', startingLocation);
-    console.log('mapLocations:', mapLocations);
     
     if (!startingLocation) {
       alert("A quest must have a starting location.");
       return;
     }
 
-    // Combine starting location with additional locations from the map
-    const allLocations = [startingLocation, ...mapLocations];
+    setIsCreatingQuest(true);
 
-    // Generate a basic itinerary from the locations
-    const itineraryArray = allLocations.map((loc, index) => ({
-      day: loc.day || 1,
-      step: index + 1,
-      location_name: loc.name,
-      description: `Visit ${loc.name}`,
-      location_id: loc.id
-    }));
+    // Create basic quest with minimal itinerary (just starting location)
+    const basicItinerary = [{
+      day: 1,
+      step: 1,
+      location_name: startingLocation.name,
+      description: `Start your quest at ${startingLocation.name}`,
+      location_id: startingLocation.id
+    }];
 
     const questData = {
       name: formData.name,
       synopsis: formData.synopsis,
       difficulty_id: parseInt(formData.difficulty_id, 10),
       interest_id: parseInt(formData.interest_id, 10),
-      quest_type_id: parseInt(formData.quest_type_id || questTypes[0]?.id || 1, 10), // Use form data or default
+      quest_type_id: parseInt(formData.quest_type_id || questTypes[0]?.id || 1, 10),
       is_public: formData.is_public,
       start_location_id: startingLocation.id,
-      itinerary: JSON.stringify(itineraryArray), // Convert to JSON string
-      locations: allLocations.map((loc, index) => ({
-        location_id: loc.id,
-        step: index + 1,
-        day: loc.day || 1,
-      })),
+      itinerary: JSON.stringify(basicItinerary),
+      locations: [{
+        location_id: startingLocation.id,
+        step: 1,
+        day: 1,
+      }],
     };
 
     console.log('Quest data being sent:', JSON.stringify(questData, null, 2));
 
     try {
       const newQuest = await apiClient.createQuest(questData);
-      alert(`Successfully created quest: ${newQuest.name}`);
-      navigate(`/quests/${newQuest.id}`); // Redirect to the new quest's itinerary page
+      console.log('Quest created successfully:', newQuest);
+      
+      setCreatedQuest(newQuest);
+      setIsQuestCreated(true);
+      
+      // Show success message
+      alert(`Quest "${newQuest.name}" created successfully! Now add more locations to build your itinerary.`);
+      
     } catch (error) {
       console.error("Failed to create quest:", error);
       console.error("Error details:", error.detail || error.message || error);
@@ -191,27 +168,26 @@ const CreateQuestPage = () => {
       }
       
       alert(errorMessage);
+    } finally {
+      setIsCreatingQuest(false);
     }
   };
 
-  const handleRemovePointOfInterest = (poiId) => {
-    setMapLocations(prev => prev.filter(loc => loc.id !== poiId));
-  };
-
-  const handleReorderLocations = (reorderedLocations) => {
-    setMapLocations(reorderedLocations);
-  };
-
-  const handleUpdateLocationDay = (locationId, newDay) => {
-    setMapLocations(prev => prev.map(loc => (loc.id === locationId ? { ...loc, day: newDay } : loc)));
-  };
-
-  const handleSelectPoi = (poi) => {
-    setSelectedPoi(poi);
-    if (poi.latitude && poi.longitude) {
-      setMapCenter([poi.latitude, poi.longitude]);
+  // Handler to finalize the quest with complete itinerary
+  const handleFinalizeQuest = async (updateData) => {
+    try {
+      console.log('Updating quest with complete itinerary:', updateData);
+      
+      const updatedQuest = await apiClient.updateQuest(createdQuest.id, updateData);
+      console.log('Quest updated successfully:', updatedQuest);
+      
+      alert(`Quest "${createdQuest.name}" has been finalized with your complete itinerary!`);
+      navigate(`/quests/${createdQuest.id}`); // Now redirect to the quest detail page
+      
+    } catch (error) {
+      console.error("Failed to finalize quest:", error);
+      alert(`Error finalizing quest: ${error.message || 'Unknown error occurred'}`);
     }
-    setShowMap(true);
   };
 
   // Show loading state while fetching reference data
@@ -235,65 +211,49 @@ const CreateQuestPage = () => {
       <div className="min-h-screen bg-gradient-to-br from-guild-secondary to-white">
         <div className="max-w-6xl mx-auto px-4 py-12">
           <header className="text-center mb-10">
-            <h1 className="text-5xl font-bold text-guild-primary mb-4">Create Your New Quest</h1>
+            <h1 className="text-5xl font-bold text-guild-primary mb-4">
+              {isQuestCreated ? `Building "${createdQuest?.name}"` : 'Create Your New Quest'}
+            </h1>
             <p className="text-xl text-guild-text max-w-2xl mx-auto mb-2">
-              Detail your adventure for the guild!
+              {isQuestCreated 
+                ? 'Add locations and build your complete quest itinerary!'
+                : 'Detail your adventure for the guild!'
+              }
             </p>
             <p className="text-lg text-guild-neutral max-w-3xl mx-auto">
-              Share your legendary journey with fellow adventurers. Whether inspired by ancient myths, 
-              beloved tales, or mystical lands, your quest awaits documentation in the guild archives.
+              {isQuestCreated
+                ? 'Your quest has been created! Now use the map below to add more locations and build out your complete adventure itinerary.'
+                : 'Share your legendary journey with fellow adventurers. Whether inspired by ancient myths, beloved tales, or mystical lands, your quest awaits documentation in the guild archives.'
+              }
             </p>
           </header>
 
-          {/* Quest Form Section */}
-          <div className="bg-white rounded-xl shadow-2xl border-2 border-guild-highlight/20 p-8">
-            <QuestForm
-              onCreateQuest={handleCreateQuest}
-              difficulties={difficulties}
-              interests={interests}
-              questTypes={questTypes}
-              mapLocationsCount={startingLocation ? 1 + mapLocations.length : 0}
-              onSetInitialLocation={handleSetInitialLocation}
-              isLoadingLocation={isLoadingLocation}
-            />
+          {/* Quest Form Section - Hide after quest is created */}
+          {!isQuestCreated && (
+            <div className="bg-white rounded-xl shadow-2xl border-2 border-guild-highlight/20 p-8">
+              <QuestForm
+                onCreateQuest={handleCreateQuest}
+                difficulties={difficulties}
+                interests={interests}
+                questTypes={questTypes}
+                mapLocationsCount={startingLocation ? 1 : 0}
+                onSetInitialLocation={handleSetInitialLocation}
+                isLoadingLocation={isLoadingLocation}
+                isCreatingQuest={isCreatingQuest}
+              />
+            </div>
+          )}
 
-            {/* Show map section only after starting location is set */}
-            {startingLocation && (
-              <>
-                {/* Quest Map Section */}
-                <QuestMap
-                  showMap={showMap}
-                  mapCenter={mapCenter}
-                  mapLocations={mapLocations}
-                  isLoadingLocation={isLoadingLocation}
-                  suggestedPois={suggestedPois}
-                  isLoadingSuggestions={isLoadingSuggestions}
-                  selectedPoi={selectedPoi}
-                  showPoiForm={showPoiForm}
-                  onCloseMap={() => setShowMap(false)}
-                  onSelectPoi={handleSelectPoi}
-                  onRemoveLocation={handleRemovePointOfInterest}
-                  onFindNearbyAttractions={() => alert('Finding nearby attractions is not yet implemented.')}
-                  onTogglePoiForm={() => setShowPoiForm(prev => !prev)}
-                  onAddPoi={handleAddPointOfInterest}
-                  onUpdatePoi={(updatedPoi) => setMapLocations(prev => prev.map(loc => (loc.id === updatedPoi.id ? { ...loc, ...updatedPoi } : loc)))}
-                />
-
-                {showMap && (
-                  <QuestRoute
-                    mapLocations={mapLocations}
-                    onRemoveLocation={handleRemovePointOfInterest}
-                    onReorderLocations={handleReorderLocations}
-                    onUpdateLocationDay={handleUpdateLocationDay}
-                    onSelectPoi={handleSelectPoi}
-                  />
-                )}
-              </>
-            )}
-          </div>
-          
-          {/* Quest Creation Tips */}
-          <QuestTips />
+          {/* Show map section after quest is created or starting location is set */}
+          {(isQuestCreated || startingLocation) && (
+            <div className="bg-white rounded-xl shadow-2xl border-2 border-guild-highlight/20 p-8 mt-8">
+              {/* Quest Map Section */}
+              <QuestItineraryBuilder
+                quest={createdQuest}
+                onFinalizeQuest={handleFinalizeQuest}
+              />
+            </div>
+          )}
         </div>
       </div>
     </>
