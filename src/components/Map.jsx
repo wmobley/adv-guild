@@ -5,28 +5,6 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import 'leaflet-defaulticon-compatibility';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
-import { API_BASE_URL, apiCall } from './config/api'
-
-// Direct fetch usage
-const fetchData = async () => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/your-endpoint`)
-    const data = await response.json()
-    return data
-  } catch (error) {
-    console.error('API Error:', error)
-  }
-}
-
-// Or using the helper function
-const fetchDataWithHelper = async () => {
-  try {
-    const data = await apiCall('/your-endpoint')
-    return data
-  } catch (error) {
-    console.error('API Error:', error)
-  }
-}
 
 const defaultLocations = [
   {
