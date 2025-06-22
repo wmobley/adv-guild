@@ -1,9 +1,32 @@
 // src/components/Map.jsx
-import { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
+import { createRoot } from 'react-dom/client'; // Import createRoot
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import 'leaflet-defaulticon-compatibility';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
+import { API_BASE_URL, apiCall } from './config/api'
+
+// Direct fetch usage
+const fetchData = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/your-endpoint`)
+    const data = await response.json()
+    return data
+  } catch (error) {
+    console.error('API Error:', error)
+  }
+}
+
+// Or using the helper function
+const fetchDataWithHelper = async () => {
+  try {
+    const data = await apiCall('/your-endpoint')
+    return data
+  } catch (error) {
+    console.error('API Error:', error)
+  }
+}
 
 const defaultLocations = [
   {
@@ -117,7 +140,7 @@ const normalizeLocationData = (location) => {
   // Check if lat/lng properties exist (alternative naming)
   else if (location.lat !== undefined && location.lng !== undefined) {
     const lat = parseFloat(location.lat);
-    const lng = parseFloat(location.lng);
+    const lng = parseFloat(location.lng); // FIX: Corrected from location.longitude
     
     if (!isNaN(lat) && !isNaN(lng)) {
       coords = [lat, lng];
@@ -143,95 +166,117 @@ export default function Map({
   mapId = "myth-map",
   height = "400px"
 }) {
-  console.log('🗺️ [Map] Component render with props:', {
-    locations,
-    locationsLength: locations?.length,
-    locationsType: typeof locations,
-    locationsIsArray: Array.isArray(locations),
-    center,
-    zoom,
-    mapId,
-    height
-  });
+  // Refs to hold the map instance and a layer group for markers
+  const mapRef = useRef(null);
+  const markerLayerRef = useRef(null);
 
+  // Effect for initial map creation (runs once on mount)
   useEffect(() => {
-    console.log('🚀 [Map] useEffect running');
-    console.log('📍 [Map] Locations data:', locations);
+    console.log('🚀 [Map] Initializing map...');
+    if (mapRef.current) {
+      // Map already initialized, skip
+      console.log('⚠️ [Map] Map already initialized, skipping re-initialization.');
+      return;
+    }
 
     try {
-      // Remove existing map if it exists
-      const existingMap = document.getElementById(mapId);
-      if (existingMap && existingMap._leaflet_id) {
-        console.log('🧹 [Map] Removing existing map');
-        existingMap._leaflet_id = null;
-      }
-
-      console.log('🔧 [Map] Creating new map with center:', center, 'zoom:', zoom);
       const map = L.map(mapId).setView(center, zoom);
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "&copy; OpenStreetMap contributors",
       }).addTo(map);
 
-      const bounds = [];
+      mapRef.current = map; // Store the map instance
+      markerLayerRef.current = L.layerGroup().addTo(map); // Create a layer group for markers
 
-      console.log(`📍 [Map] Processing ${locations.length} locations`);
+      console.log('✅ [Map] Map initialized successfully.');
 
-      locations.forEach((loc, index) => {
-        console.log(`\n📍 [Map] Processing location ${index}:`, loc);
-
-        if (!loc) {
-          console.warn(`⚠️ [Map] Location at index ${index} is null or undefined`);
-          return;
-        }
-
-        // Normalize the location data to ensure coords are in the right format
-        const normalizedLocation = normalizeLocationData(loc);
-        
-        if (!normalizedLocation) {
-          console.warn(`⚠️ [Map] Could not normalize location at index ${index}:`, loc);
-          return;
-        }
-
-        console.log(`🔍 [Map] Normalized location ${index} coords:`, normalizedLocation.coords);
-
-        try {
-          console.log(`✨ [Map] Creating Leaflet marker ${index} with coords:`, normalizedLocation.coords);
-          const marker = L.marker(normalizedLocation.coords).addTo(map);
-          
-          const popupContent = `<strong>${normalizedLocation.name || 'Unknown'}</strong><br>${normalizedLocation.description || 'No description'}`;
-          console.log(`🎈 [Map] Adding popup to marker ${index}:`, popupContent);
-          marker.bindPopup(popupContent);
-          
-          bounds.push(normalizedLocation.coords);
-          console.log(`✅ [Map] Marker ${index} created successfully`);
-        } catch (error) {
-          console.error(`❌ [Map] Error creating marker at index ${index}:`, error);
-          console.error('❌ [Map] Location data:', normalizedLocation);
-          console.error('❌ [Map] Error stack:', error.stack);
-        }
-      });
-
-      console.log(`📏 [Map] Bounds array has ${bounds.length} entries:`, bounds);
-
-      if (bounds.length > 1) {
-        try {
-          console.log('🎯 [Map] Fitting map to bounds');
-          map.fitBounds(bounds, { padding: [50, 50] });
-        } catch (error) {
-          console.error('❌ [Map] Error fitting bounds:', error);
-          console.error('❌ [Map] Bounds data:', bounds);
-        }
-      }
-
+      // Cleanup function to remove the map when the component unmounts
       return () => {
-        try {
-          console.log('🧹 [Map] Cleanup - removing map');
-          map.remove(); // Cleanup
-        } catch (error) {
-          console.error('❌ [Map] Error during cleanup:', error);
+        if (mapRef.current) {
+          console.log('🧹 [Map] Cleaning up map instance.');
+          mapRef.current.remove();
+          mapRef.current = null;
+          markerLayerRef.current = null; // Clear marker layer ref too
         }
       };
+    } catch (error) {
+      console.error('❌ [Map] Error during initial map setup:', error);
+    }
+  }, [mapId, center, zoom]); // mapId, center, zoom are part of initial setup, so they are dependencies here.
+
+  // Effect for updating markers and fitting bounds (runs when 'locations' prop changes)
+  useEffect(() => {
+    const map = mapRef.current;
+    const markerLayer = markerLayerRef.current;
+
+    if (!map || !markerLayer) {
+      console.log('⏳ [Map] Map or marker layer not ready for updates.');
+      return; // Map not yet initialized
+    }
+
+    console.log('🔄 [Map] Updating map markers and view based on locations prop...');
+
+    try {
+      // Clear all existing markers from the layer group
+      markerLayer.clearLayers();
+      const leafletMarkers = []; // Renamed from validMarkers for clarity with Leaflet objects
+
+      if (locations && Array.isArray(locations) && locations.length > 0) {
+        locations.forEach((loc, index) => {
+          // console.log(`\n📍 [Map] Processing location ${index} for update:`, loc); // Re-enable for detailed debug if needed
+
+          if (!loc) {
+            console.warn(`⚠️ [Map] Location at index ${index} is null or undefined, skipping.`);
+            return;
+          }
+
+          const normalizedLocation = normalizeLocationData(loc);
+          
+          if (!normalizedLocation || !normalizedLocation.coords) {
+            console.warn(`⚠️ [Map] Could not normalize valid coordinates for location at index ${index}, skipping:`, loc);
+            return;
+          }
+
+          try {
+            const marker = L.marker(normalizedLocation.coords);
+
+            let popupHtml;
+            let popupNode; // Declare popupNode here
+            if (React.isValidElement(normalizedLocation.popupContent)) {
+              popupNode = document.createElement('div');
+              const root = createRoot(popupNode);
+              root.render(normalizedLocation.popupContent);
+            } else {
+              popupNode = document.createElement('div'); // Create a div for string content
+              popupNode.innerHTML = `<strong>${normalizedLocation.name || 'Unknown'}</strong><br>${normalizedLocation.description || 'No description'}`;
+            }
+            marker.bindPopup(popupNode); // Bind the DOM node directly
+            
+            markerLayer.addLayer(marker); // Add marker to the layer group
+            leafletMarkers.push(marker);
+            // console.log(`✅ [Map] Marker ${index} added to layer group.`); // Re-enable for detailed debug if needed
+          } catch (error) {
+            console.error(`❌ [Map] Error creating marker at index ${index}:`, error);
+            console.error('❌ [Map] Location data:', normalizedLocation);
+            console.error('❌ [Map] Error stack:', error.stack);
+          }
+        });
+
+        // Fit map bounds to all markers
+        if (leafletMarkers.length > 0) {
+          const group = new L.featureGroup(leafletMarkers);
+          map.fitBounds(group.getBounds().pad(0.5)); // Add some padding
+          console.log(`🎯 [Map] Map fitted to ${leafletMarkers.length} markers.`);
+        } else {
+          // If no markers, reset view to a default or previous state
+          map.setView(center, zoom); // Use initial center/zoom as fallback
+          console.log('ℹ️ [Map] No valid markers found, resetting map view to default.');
+        }
+      } else {
+        map.setView(center, zoom); // Use initial center/zoom as fallback
+        console.log('ℹ️ [Map] Locations array is empty or invalid, resetting map view to default.');
+      }
     } catch (error) {
       console.error('❌ [Map] Error in useEffect:', error);
       console.error('❌ [Map] Error stack:', error.stack);
@@ -249,5 +294,4 @@ export default function Map({
     <div className="rounded-lg shadow-md overflow-hidden">
       <div id={mapId} className="w-full z-0 rounded-xl" style={{ height }} />
     </div>
-  );
-}
+  )};

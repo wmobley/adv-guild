@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import apiClient from '../services/advGuildApiClient';
 import Header from '../components/Header';
 import ItineraryEditor from '../components/ItineraryEditor';
+import QuestMap from '../components/QuestMap';
 
 const ItineraryPage = () => {
   const { questId } = useParams(); // Get questId from URL
@@ -12,6 +13,8 @@ const ItineraryPage = () => {
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [questLocations, setQuestLocations] = useState([]);
+  const [locationsMap, setLocationsMap] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,6 +31,21 @@ const ItineraryPage = () => {
           console.log('No current user or user API not available:', userError);
         }
 
+        // Get all locations for mapping
+        let allLocations = [];
+        try {
+          allLocations = await apiClient.getLocations();
+        } catch (locError) {
+          console.log('Could not fetch locations:', locError);
+        }
+
+        // Create locations map for quick lookup
+        const locMap = allLocations.reduce((acc, loc) => {
+          acc[loc.id] = loc;
+          return acc;
+        }, {});
+        setLocationsMap(locMap);
+
         // The API may return the itinerary as a single string, but the component
         // expects an array to .map() over. This ensures it's always an array.
         if (questData && questData.itinerary && typeof questData.itinerary === 'string') {
@@ -38,16 +56,59 @@ const ItineraryPage = () => {
             questData.itinerary = [questData.itinerary];
           }
         }
+
+        // Extract quest locations for the map
+        const questLocs = [];
         
+        // Add starting location if available
+        // Prioritize the embedded start_location object from the quest data
+        if (questData.start_location && questData.start_location.latitude && questData.start_location.longitude) {
+          questLocs.push({
+            ...questData.start_location,
+            step: 0,
+            isStart: true
+          });
+        } else if (questData.start_location_id && locMap[questData.start_location_id]) {
+          // Fallback to using the locations map if embedded object is missing/incomplete
+          questLocs.push({
+            ...locMap[questData.start_location_id],
+            step: 0,
+            isStart: true
+          });
+        }
+
+        // Add locations from quest.locations array if available
+        if (questData.locations && Array.isArray(questData.locations)) {
+          questData.locations.forEach(questLoc => {
+            const location = locMap[questLoc.location_id];
+            if (location && location.id !== questData.start_location_id) {
+              questLocs.push({
+                ...location,
+                step: questLoc.step || questLocs.length,
+                day: questLoc.day || 1
+              });
+            }
+          });
+        } else if (questData.itinerary && Array.isArray(questData.itinerary)) {
+          // Fallback: try to extract from itinerary
+          questData.itinerary.forEach((item, index) => {
+            if (item.location_id && locMap[item.location_id] && item.location_id !== questData.start_location_id) {
+              questLocs.push({
+                ...locMap[item.location_id],
+                step: index + 1,
+                day: item.day || 1
+              });
+            }
+          });
+        }
+
+        setQuestLocations(questLocs);
         setQuest(questData);
         setCurrentUser(userData);
         
         // Debug logging
         console.log('Quest data:', questData);
-        console.log('Current user:', userData);
-        console.log('Quest created_by:', questData?.created_by);
-        console.log('Quest owner_id:', questData?.owner_id);
-        console.log('Quest user_id:', questData?.user_id);
+        console.log('Quest locations for map:', questLocs);
         
       } catch (err) {
         setError(err.message || 'Quest not found.');
@@ -62,23 +123,8 @@ const ItineraryPage = () => {
     }
   }, [questId]);
 
-  // For now, let's make this always true for testing, then we can fix the ownership logic
+  // For now, let's make this always true for testing
   const isOwner = true; // TODO: Fix ownership check
-  
-  // Original ownership check (commented out for debugging):
-  // const isOwner = currentUser && quest && (
-  //   currentUser.id === quest.created_by || 
-  //   currentUser.id === quest.owner_id ||
-  //   currentUser.id === quest.user_id
-  // );
-
-  console.log('isOwner:', isOwner);
-  console.log('currentUser:', currentUser);
-  console.log('quest owner fields:', quest ? {
-    created_by: quest.created_by,
-    owner_id: quest.owner_id,
-    user_id: quest.user_id
-  } : 'no quest');
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -101,15 +147,60 @@ const ItineraryPage = () => {
 
       // TODO: Implement updateQuestItinerary in apiClient
       console.log('Would save itinerary:', dataToSend);
-      // const updatedQuest = await apiClient.updateQuestItinerary(questId, dataToSend);
       
       // For now, just update local state
-      setQuest({ 
+      const updatedQuest = {
         ...quest, 
         itinerary: updateData.itinerary,
         locations: updateData.locations 
-      });
+      };
+      setQuest(updatedQuest);
       setIsEditing(false);
+      
+      // Update quest locations for map using the new combined quest data
+      // This logic is now consistent with the initial data fetch in useEffect
+      const updatedQuestLocs = [];
+      // Prioritize the embedded start_location object from the quest data
+      if (updatedQuest.start_location && updatedQuest.start_location.latitude && updatedQuest.start_location.longitude) {
+          updatedQuestLocs.push({
+            ...updatedQuest.start_location,
+            step: 0,
+            isStart: true
+          });
+      } else if (updatedQuest.start_location_id && locationsMap[updatedQuest.start_location_id]) {
+          // Fallback to using the locations map if embedded object is missing/incomplete
+          updatedQuestLocs.push({
+            ...locationsMap[updatedQuest.start_location_id],
+            step: 0,
+            isStart: true
+          });
+      }
+      
+      if (updatedQuest.locations && Array.isArray(updatedQuest.locations)) {
+        updatedQuest.locations.forEach(questLoc => {
+          const location = locationsMap[questLoc.location_id];
+          if (location && location.id !== updatedQuest.start_location_id) {
+            updatedQuestLocs.push({
+              ...location,
+              step: questLoc.step || updatedQuestLocs.length,
+              day: questLoc.day || 1
+            });
+          }
+        });
+      } else if (updatedQuest.itinerary && Array.isArray(updatedQuest.itinerary)) {
+        // Fallback: try to extract from itinerary
+        updatedQuest.itinerary.forEach((item, index) => {
+          if (item.location_id && locationsMap[item.location_id] && item.location_id !== updatedQuest.start_location_id) {
+            updatedQuestLocs.push({
+              ...locationsMap[item.location_id],
+              step: index + 1,
+              day: item.day || 1
+            });
+          }
+        });
+      }
+      
+      setQuestLocations(updatedQuestLocs);
       
       alert('Itinerary updated successfully! (Note: This is just a local update for now)');
     } catch (err) {
@@ -119,6 +210,32 @@ const ItineraryPage = () => {
       setIsSaving(false);
     }
   };
+
+  // Prepare marker data for the map
+  const questMarkers = useMemo(() => {
+    return questLocations
+      .filter(location => location.latitude != null && location.longitude != null)
+      .map(location => ({
+        coords: [location.latitude, location.longitude],
+        popupContent: (
+          <div className="font-sans">
+            <strong className="text-guild-primary block text-lg">
+              {location.isStart ? '🏁 Start: ' : `Step ${location.step}: `}
+              {location.name}
+            </strong>
+            {location.address && (
+              <span className="text-sm text-guild-neutral block mt-1">{location.address}</span>
+            )}
+            {location.day && (
+              <span className="text-xs text-guild-accent block mt-1">Day {location.day}</span>
+            )}
+          </div>
+        ),
+        isStart: location.isStart || false,
+        step: location.step
+      }))
+      .sort((a, b) => a.step - b.step); // Sort by step order
+  }, [questLocations]);
 
   if (loading) return (
     <div className="min-h-screen bg-gradient-to-br from-guild-secondary to-white flex items-center justify-center">
@@ -256,7 +373,7 @@ const ItineraryPage = () => {
                     <p className="text-guild-text text-sm mt-1 mb-4">You can add an itinerary to help adventurers plan their journey!</p>
                     <button
                       onClick={handleEditClick}
-                      className="bg-guild-accent hover:bg-guild-primary text-white font-medium py-2 px-4 rounded-lg transition-colors shadow-md hover:shadow-lg"
+                      className="bg-guild-accent hover:text-guild-primary font-medium py-2 px-4 rounded-lg transition-colors shadow-md hover:shadow-lg"
                     >
                       Add Itinerary
                     </button>
@@ -283,24 +400,18 @@ const ItineraryPage = () => {
             </div>
           </section>
         )}
-
-        {/* Map placeholder - Only show when not editing */}
-        {!isEditing && (
+        
           <section className="mt-8 bg-white p-8 rounded-xl shadow-lg border-2 border-guild-highlight/20">
             <div className="flex items-center mb-6">
               <span className="text-guild-highlight text-2xl mr-3">🗺️</span>
               <h2 className="text-2xl font-semibold text-guild-primary">Quest Route</h2>
             </div>
-            
-            <div className="h-96 bg-guild-secondary/30 rounded-lg flex items-center justify-center border-2 border-guild-highlight/20">
-              <div className="text-center p-6">
-                <div className="text-guild-highlight text-4xl mb-3">🗺️</div>
-                <p className="text-guild-neutral font-medium">Interactive Map for {quest.name}</p>
-                <p className="text-guild-text text-sm mt-1">(Map component placeholder)</p>
-              </div>
+
+            <div className="h-96 bg-guild-secondary/30 rounded-lg border-2 border-guild-highlight/20 overflow-hidden">
+              <QuestMap markers={questMarkers} />
             </div>
           </section>
-        )}
+        
       </div>
     </div>
   );
