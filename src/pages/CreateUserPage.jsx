@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-// import { createUser } from '@firebasegen/adv-guild-backend-connector'; // Assuming this SDK function exists
+import apiClient from '../services/advGuildApiClient';
 import Header from '../components/Header';
 const CreateUserPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [displayName, setDisplayName] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -19,11 +20,12 @@ const CreateUserPage = () => {
     setLoading(true);
     setError('');
     try {
-      // Replace with your actual SDK call for user creation
-      // await createUser({ email, password });
-      console.log('User creation attempt:', { email, password });
-      alert('Account creation successful! (Placeholder - implement actual logic)');
-      navigate('/login');
+      await apiClient.registerUser({
+        email,
+        password,
+        display_name: displayName,
+      });
+      navigate('/discovery'); // Registration returns a token, so we can log in immediately
     } catch (err) {
       setError(err.message || 'Failed to create account. Please try again.');
       console.error("Create user error:", err);
@@ -49,6 +51,20 @@ const CreateUserPage = () => {
             </div>
           )}
           <div className="space-y-4">
+            <div>
+              <label htmlFor="displayName" className="block text-sm font-medium text-guild-text mb-1">
+                Display Name
+              </label>
+              <input
+                id="displayName"
+                type="text"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                placeholder="How you'll be known in the Guild"
+                required
+                className="appearance-none rounded-md relative block w-full px-3 py-3 border-2 border-guild-neutral/30 placeholder-guild-neutral text-guild-text focus:outline-none focus:ring-2 focus:ring-guild-highlight focus:border-guild-highlight sm:text-sm bg-white transition-colors"
+              />
+            </div>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-guild-text mb-1">
                 Email Address

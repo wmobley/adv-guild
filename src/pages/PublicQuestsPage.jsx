@@ -1,37 +1,111 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
-// import { getPublicQuests } from '@firebasegen/adv-guild-backend-connector'; // As used in SdkTestComponent
-// import QuestCard from '../components/QuestCard'; // Assuming you want to reuse QuestCard
-
-// Placeholder data for public quests - replace with actual data fetching
-const initialPublicQuests = [
-  { id: 'pq1', name: 'The Dragon\'s Pass Trail', synopsis: 'A scenic route said to be carved by an ancient dragon.', startLocation: { name: 'Mountain Foot Village' }, difficulty: { name: 'Hard' }, interest: { name: 'Hiking' }, questType: { name: 'Exploration' }, author: 'DragonSlayer92' },
-  { id: 'pq2', name: 'Lost Temple of Aethel', synopsis: 'Uncover the secrets of a temple swallowed by the jungle.', startLocation: { name: 'Jungle Outpost' }, difficulty: { name: 'Moderate' }, interest: { name: 'Archaeology' }, questType: { name: 'Discovery' }, author: 'TempleSeeker' },
-  { id: 'pq3', name: 'Coastal Wanderer\'s Route', synopsis: 'Explore charming fishing villages and hidden coves.', startLocation: { name: 'Seaside Town' }, difficulty: { name: 'Easy' }, interest: { name: 'Culture' }, questType: { name: 'Tour' }, author: 'SeaWanderer' },
-];
+import apiClient from '../services/advGuildApiClient'; // Import the API client
+import QuestMapDisplay from '/src/components/QuestMapDisplay.jsx'; // Use the correct display component with an absolute path
 
 const PublicQuestsPage = () => {
-  const [publicQuests, setPublicQuests] = useState(initialPublicQuests);
-  const [loading, setLoading] = useState(false); // Set to true if fetching data
+  const [publicQuests, setPublicQuests] = useState([]);
+  const [loading, setLoading] = useState(true); // Start in loading state
   const [error, setError] = useState(null);
+  const [locationsMap, setLocationsMap] = useState({});
+  const [difficultiesMap, setDifficultiesMap] = useState({});
+  const [interestsMap, setInterestsMap] = useState({});
 
-  // useEffect(() => {
-  //   const fetchQuests = async () => {
-  //     setLoading(true);
-  //     try {
-  //       const data = await getPublicQuests(); // Or your SDK function
-  //       setPublicQuests(data.quests || []); // Adjust based on SDK response structure
-  //       setError(null);
-  //     } catch (err) {
-  //       setError(err.message || 'Failed to fetch public quests.');
-  //       setPublicQuests([]);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   fetchQuests();
-  // }, []);
+  // State for filters
+  const [selectedDifficulty, setSelectedDifficulty] = useState('all');
+  const [selectedInterest, setSelectedInterest] = useState('all');
+  // We might also want to fetch users if we want to display author names instead of IDs
+  // const [usersMap, setUsersMap] = useState({});
+
+  useEffect(() => {
+    const fetchQuestsAndReferenceData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        console.log("Attempting to fetch public quests and reference data from adv-guild-api...");
+        
+        const [questsData, 
+          locationsData, 
+          difficultiesData, 
+          interestsData
+        ] = await Promise.all([
+          apiClient.getPublicQuests(),
+          apiClient.getLocations(),
+          apiClient.getDifficulties(),
+          apiClient.getInterests(),
+          // apiClient.getUsers() // If you have an endpoint for all users
+        ]);
+        console.log(questsData)
+        // Process quests
+        setPublicQuests(questsData.quests || questsData || []);
+
+        // Process reference data into maps for easy lookup
+        const locMap = locationsData.reduce((acc, loc) => {
+          acc[loc.id] = loc;
+          return acc;
+        }, {});
+        setLocationsMap(locMap);
+
+        const diffMap = difficultiesData.reduce((acc, diff) => {
+          acc[diff.id] = diff;
+          return acc;
+        }, {});
+        setDifficultiesMap(diffMap);
+
+        const intMap = interestsData.reduce((acc, interest) => {
+          acc[interest.id] = interest;
+          return acc;
+        }, {});
+        setInterestsMap(intMap);
+
+      } catch (err) {
+        console.error("Failed to fetch public quests:", err);
+        setError(err.message || 'Failed to fetch public quests.');
+        setPublicQuests([]); // Clear list on error
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchQuestsAndReferenceData();
+  }, []); // Empty dependency array means this effect runs once on mount
+
+  // Create a memoized list of quests that updates when filters change
+  const filteredQuests = React.useMemo(() => {
+    if (loading) return []; // Don't filter while loading
+    return publicQuests.filter(quest => {
+      const difficultyMatch = selectedDifficulty === 'all' || quest.difficulty_id === parseInt(selectedDifficulty, 10);
+      const interestMatch = selectedInterest === 'all' || quest.interest_id === parseInt(selectedInterest, 10);
+      return difficultyMatch && interestMatch;
+    });
+  }, [publicQuests, selectedDifficulty, selectedInterest, loading]);
+
+  // Prepare markers for the map from the fetched quest data
+  const questMarkers = filteredQuests
+    .map(quest => {
+      const location = locationsMap[quest.start_location_id];
+      if (location && location.latitude && location.longitude) {
+        return {
+          coords: [location.latitude, location.longitude],
+          popupContent: (
+            <div className="font-sans">
+              <strong className="text-guild-primary block text-lg">{quest.name}</strong>
+              <span className="text-sm text-guild-neutral">{location.name}</span>
+              <br />
+              {/* 
+                Using a standard <a> tag here instead of React Router's <Link> component.
+                The <Link> component requires a Router context, which isn't available when rendering into a Leaflet popup.
+                This ensures the link works correctly.
+              */}
+              <a href={`/quests/${quest.id}`} className="text-guild-accent hover:underline mt-2 inline-block">View Quest</a>
+            </div>
+          )
+        };
+      }
+      return null;
+    })
+    .filter(marker => marker !== null); // Filter out quests with no location data
 
   if (loading) return (
     <div className="min-h-screen bg-gradient-to-br from-guild-secondary to-white flex items-center justify-center">
@@ -68,35 +142,50 @@ const PublicQuestsPage = () => {
           </p>
         </header>
 
+        {/* Interactive Map Section */}
+        <section className="mb-12">
+          <div className="h-96 md:h-[500px] bg-white rounded-xl shadow-lg border-2 border-guild-highlight/20 p-2">
+            <QuestMapDisplay markers={questMarkers} />
+          </div>
+        </section>
+
         {/* Filter/Search Section - Future Enhancement */}
         <div className="bg-white rounded-xl shadow-md border-2 border-guild-highlight/20 p-6 mb-8">
           <div className="flex flex-wrap gap-4 items-center justify-between">
             <div className="flex items-center space-x-4">
               <span className="text-guild-text font-medium">Filter by:</span>
-              <select className="border-2 border-guild-neutral/30 rounded-lg px-3 py-2 text-guild-text focus:border-guild-highlight focus:outline-none">
-                <option>All Difficulties</option>
-                <option>Easy</option>
-                <option>Moderate</option>
-                <option>Hard</option>
-                <option>Challenging</option>
+              <select 
+                value={selectedDifficulty}
+                onChange={(e) => setSelectedDifficulty(e.target.value)}
+                className="border-2 border-guild-neutral/30 rounded-lg px-3 py-2 text-guild-text focus:border-guild-highlight focus:outline-none bg-white"
+              >
+                <option value="all">All Difficulties</option>
+                {Object.values(difficultiesMap).map(diff => (
+                  <option key={diff.id} value={diff.id}>{diff.name}</option>
+                ))}
               </select>
-              <select className="border-2 border-guild-neutral/30 rounded-lg px-3 py-2 text-guild-text focus:border-guild-highlight focus:outline-none">
-                <option>All Interests</option>
-                <option>Hiking</option>
-                <option>History</option>
-                <option>Culture</option>
-                <option>Archaeology</option>
+              <select 
+                value={selectedInterest}
+                onChange={(e) => setSelectedInterest(e.target.value)}
+                className="border-2 border-guild-neutral/30 rounded-lg px-3 py-2 text-guild-text focus:border-guild-highlight focus:outline-none bg-white"
+              >
+                <option value="all">All Interests</option>
+                {Object.values(interestsMap).map(interest => (
+                  <option key={interest.id} value={interest.id}>{interest.name}</option>
+                ))}
               </select>
             </div>
             <div className="text-guild-neutral">
-              <span className="font-medium">{publicQuests.length}</span> quests available
+              <span className="font-medium">{filteredQuests.length}</span> of 
+              <span className="font-medium"> {publicQuests.length}</span> quests shown
             </div>
           </div>
         </div>
 
         {publicQuests.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {publicQuests.map(quest => (
+            {filteredQuests.map(quest => (
+              
               <div key={quest.id} className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all border-2 border-guild-highlight/20 hover:border-guild-highlight/40 group">
                 <div className="flex items-start justify-between mb-3">
                   <h2 className="text-2xl font-semibold text-guild-primary mb-2 group-hover:text-guild-accent transition-colors">{quest.name}</h2>
@@ -106,20 +195,20 @@ const PublicQuestsPage = () => {
                 <div className="space-y-2 mb-4">
                   <p className="text-sm text-guild-neutral flex items-center">
                     <span className="text-guild-highlight mr-2">📍</span>
-                    Start: {quest.startLocation.name}
+                    Start: {locationsMap[quest.start_location_id]?.name || 'N/A'}
                   </p>
                   <p className="text-sm text-guild-neutral flex items-center">
                     <span className="text-guild-highlight mr-2">⭐</span>
-                    Difficulty: {quest.difficulty.name}
+                    Difficulty: {difficultiesMap[quest.difficulty_id]?.name || 'N/A'}
                   </p>
                   <p className="text-sm text-guild-neutral flex items-center">
                     <span className="text-guild-highlight mr-2">🎯</span>
-                    Interest: {quest.interest.name}
+                    Interest: {interestsMap[quest.interest_id]?.name || 'N/A'}
                   </p>
-                  {quest.author && (
+                  {quest.author_id && (
                     <p className="text-sm text-guild-neutral flex items-center">
                       <span className="text-guild-highlight mr-2">👤</span>
-                      By: {quest.author}
+                      By: Author ID {quest.author_id} {/* Replace with usersMap[quest.author_id]?.display_name if fetching users */}
                     </p>
                   )}
                 </div>
@@ -144,7 +233,7 @@ const PublicQuestsPage = () => {
           <div className="text-center py-16">
             <div className="bg-white rounded-xl shadow-lg p-12 max-w-md mx-auto border-2 border-guild-highlight/20">
               <div className="text-guild-neutral text-6xl mb-6">🏰</div>
-              <h3 className="text-2xl font-bold text-guild-primary mb-4">No Public Quests</h3>
+              <h3 className="text-2xl font-bold text-guild-primary mb-4">{filteredQuests.length === 0 && publicQuests.length > 0 ? 'No Quests Match Your Filters' : 'No Public Quests'}</h3>
               <p className="text-guild-text mb-6 leading-relaxed">
                 No public quests available at the moment. Check back soon for new adventures from the guild community!
               </p>

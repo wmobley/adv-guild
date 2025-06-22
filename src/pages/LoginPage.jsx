@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-// import { loginUser } from '@firebasegen/adv-guild-backend-connector'; // Assuming this SDK function exists
+import apiClient from '../services/advGuildApiClient';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -14,11 +14,8 @@ const LoginPage = () => {
     setLoading(true);
     setError('');
     try {
-      // Replace with your actual SDK call for user login
-      // const user = await loginUser({ email, password });
-      console.log('Login attempt:', { email, password });
-      alert('Login successful! (Placeholder - implement actual logic and redirect)');
-      navigate('/discovery'); // Navigate to discovery page after login
+      await apiClient.loginUser({ email, password });
+      navigate('/my-journey'); // Navigate to discovery page after login
     } catch (err) {
       setError(err.message || 'Failed to login. Check your credentials.');
       console.error("Login error:", err);

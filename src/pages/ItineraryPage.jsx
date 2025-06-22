@@ -1,16 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-// import { getQuestById } from '@firebasegen/adv-guild-backend-connector'; // Placeholder for your SDK function
+import apiClient from '../services/advGuildApiClient';
 import Header from '../components/Header';
-// Placeholder quest data - replace with actual data fetching
-const placeholderQuests = {
-  q1: { id: 'q1', name: 'The Whispering Peaks', synopsis: 'An adventurous trek through alpine wonders.', startLocation: { name: 'Alpine Village', lat: 46.59, lng: 7.90 }, difficulty: { name: 'Challenging' }, interest: { name: 'Hiking' }, questType: { name: 'Exploration' }, itinerary: ['Day 1: Arrive at Alpine Village, check into lodge.', 'Day 2: Hike to Eagle Point.', 'Day 3: Explore the Crystal Caves.', 'Day 4: Return journey.'] },
-  q2: { id: 'q2', name: 'Sunken City Secrets', synopsis: 'Discover the mysteries of a forgotten coastal town.', startLocation: { name: 'Coastal Town', lat: 42.81, lng: -70.87 }, difficulty: { name: 'Moderate' }, interest: { name: 'History' }, questType: { name: 'Investigation' }, itinerary: ['Day 1: Explore the old docks.', 'Day 2: Visit the maritime museum.', 'Day 3: Scuba diving at the reef.'] },
-  q3: { id: 'q3', name: 'Forest of Shadows', synopsis: 'A journey into an ancient, mystical forest.', startLocation: { name: 'Old Mill', lat: 40.71, lng: -74.00 }, difficulty: { name: 'Easy' }, interest: { name: 'Nature' }, questType: { name: 'Exploration' }, itinerary: ['Day 1: Nature walk to the Whispering Falls.', 'Day 2: Bird watching and picnic.'] },
-  pq1: { id: 'pq1', name: 'The Dragon\'s Pass Trail', synopsis: 'A scenic route said to be carved by an ancient dragon.', startLocation: { name: 'Mountain Foot Village' }, difficulty: { name: 'Hard' }, interest: { name: 'Hiking' }, questType: { name: 'Exploration' }, itinerary: ['Day 1: Ascend to Dragon\'s Tooth peak.', 'Day 2: Traverse the ridgeline.', 'Day 3: Descend via the western slope.'] },
-  pq2: { id: 'pq2', name: 'Lost Temple of Aethel', synopsis: 'Uncover the secrets of a temple swallowed by the jungle.', startLocation: { name: 'Jungle Outpost' }, difficulty: { name: 'Moderate' }, interest: { name: 'Archaeology' }, questType: { name: 'Discovery' }, itinerary: ['Day 1: Trek to temple ruins.', 'Day 2: Explore temple grounds.', 'Day 3: Decipher ancient carvings.'] },
-  pq3: { id: 'pq3', name: 'Coastal Wanderer\'s Route', synopsis: 'Explore charming fishing villages and hidden coves.', startLocation: { name: 'Seaside Town' }, difficulty: { name: 'Easy' }, interest: { name: 'Culture' }, questType: { name: 'Tour' }, itinerary: ['Day 1: Visit the lighthouse and market.', 'Day 2: Boat trip to the seal colony.', 'Day 3: Coastal walk to Hidden Cove.'] },
-};
 
 const ItineraryPage = () => {
   const { questId } = useParams(); // Get questId from URL
@@ -19,19 +10,29 @@ const ItineraryPage = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Simulate fetching quest data
-    setLoading(true);
-    const fetchedQuest = placeholderQuests[questId];
-    if (fetchedQuest) {
-      setQuest(fetchedQuest);
+    const fetchQuestDetails = async () => {
+      setLoading(true);
       setError(null);
-    } else {
-      setError('Quest not found.');
-      setQuest(null);
+      try {
+        const data = await apiClient.getQuestById(questId);
+        // The API may return the itinerary as a single string, but the component
+        // expects an array to .map() over. This ensures it's always an array.
+        if (data && data.itinerary && typeof data.itinerary === 'string') {
+          // Treat the entire string as a single itinerary item.
+          data.itinerary = [data.itinerary];
+        }
+        setQuest(data);
+      } catch (err) {
+        setError(err.message || 'Quest not found.');
+        console.error("Failed to fetch quest details:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (questId) {
+      fetchQuestDetails();
     }
-    setLoading(false);
-    // In a real app, you would fetch data using your SDK:
-    // getQuestById({ id: questId }).then(data => setQuest(data)).catch(err => setError(err.message));
   }, [questId]);
 
   if (loading) return (
@@ -87,17 +88,17 @@ const ItineraryPage = () => {
               <div className="flex items-center">
                 <span className="text-guild-highlight mr-2">⭐</span>
                 <span className="text-guild-neutral">Difficulty:</span>
-                <span className="text-guild-text font-medium ml-1">{quest.difficulty.name}</span>
+                <span className="text-guild-text font-medium ml-1">{quest.difficulty?.name || 'N/A'}</span>
               </div>
               <div className="flex items-center">
                 <span className="text-guild-highlight mr-2">🎯</span>
                 <span className="text-guild-neutral">Interest:</span>
-                <span className="text-guild-text font-medium ml-1">{quest.interest.name}</span>
+                <span className="text-guild-text font-medium ml-1">{quest.interest?.name || 'N/A'}</span>
               </div>
               <div className="flex items-center">
                 <span className="text-guild-highlight mr-2">📍</span>
                 <span className="text-guild-neutral">Start:</span>
-                <span className="text-guild-text font-medium ml-1">{quest.startLocation.name}</span>
+                <span className="text-guild-text font-medium ml-1">{quest.start_location?.name || 'N/A'}</span>
               </div>
             </div>
           </div>

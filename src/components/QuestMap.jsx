@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import Map from './Map';
 import PoiCard from './PoiCard';
 import LocationForm from './LocationForm';
-// Import the generated Data Connect functions using the same pattern as SdkTestComponent
-// import { createPointOfInterest } from '@firebasegen/adv-guild-backend-connector';
+import apiClient from '../services/advGuildApiClient';
 
 const QuestMap = ({
   showMap,
@@ -26,7 +25,9 @@ const QuestMap = ({
     name: '',
     narrative: '',
     type: '',
-    address: ''
+    address: '',
+    lat: null,
+    lng: null,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -44,53 +45,44 @@ const QuestMap = ({
 
   const handleAddPoi = async (e) => {
     e.preventDefault();
-    
-    console.log('Form data being submitted:', newPoi);
-    
+
     // Validate required fields
     if (!newPoi.name.trim()) {
       alert('Please enter a name for the Point of Interest!');
       return;
     }
-    
+
     setIsSubmitting(true);
-    
+
     try {
-      // Prepare data for Firebase Data Connect
-      const poiData = {
+      // Prepare data for our backend API (Points of Interest are 'Locations' in the backend)
+      const locationData = {
         name: newPoi.name.trim(),
-        narrative: newPoi.narrative || null,
-        type: newPoi.type || null,
+        description: newPoi.narrative || null, // Map narrative to description
         address: newPoi.address || null,
-        lat: newPoi.lat || null,
-        lng: newPoi.lng || null
+        latitude: newPoi.lat || null,
+        longitude: newPoi.lng || null,
+        // 'type' from the form is not part of the backend Location model, so we omit it.
       };
 
-      console.log('Submitting to Firebase Data Connect:', poiData);
+      console.log('Submitting to Adv Guild API:', locationData);
+      const newLocation = await apiClient.createLocation(locationData);
+      console.log('Successfully created location:', newLocation);
 
-      // Submit to Firebase Data Connect using the same pattern as SdkTestComponent
-      const result = await createPointOfInterest(poiData); // Adjust parameters based on your actual function signature
-
-      console.log('Successfully created POI:', result);
-
-      // Call the parent handler with the created POI
+      // Call the parent handler with the complete location object from the API
       if (onAddPoi) {
-        onAddPoi({
-          ...poiData,
-          id: result.id || result.data?.id, // Adjust based on actual response structure
-          createdAt: result.createdAt || result.data?.createdAt,
-          updatedAt: result.updatedAt || result.data?.updatedAt
-        });
+        // The response from the API should be the full location object including id, etc.
+        onAddPoi(newLocation);
       }
 
       // Reset form and close
-      setNewPoi({ name: '', narrative: '', type: '', address: '' });
+      setNewPoi({ name: '', narrative: '', type: '', address: '', lat: null, lng: null });
       onTogglePoiForm();
       
       alert('Point of Interest added successfully!');
       
     } catch (error) {
-      console.error('SDK Error creating POI:', error);
+      console.error('API Error creating location:', error);
       alert(`Error adding Point of Interest: ${error.message || 'Failed to create POI'}`);
     } finally {
       setIsSubmitting(false);
@@ -103,7 +95,7 @@ const QuestMap = ({
   };
 
   const handleCancelForm = () => {
-    setNewPoi({ name: '', narrative: '', type: '', address: '' });
+    setNewPoi({ name: '', narrative: '', type: '', address: '', lat: null, lng: null });
     onTogglePoiForm();
   };
 
@@ -112,21 +104,29 @@ const QuestMap = ({
     setNewPoi(prev => ({
       ...prev,
       address: locationData.formatted,
-      lat: locationData.lat || null,
-      lng: locationData.lng || null
+      lat: parseFloat(locationData.lat) || null,
+      lng: parseFloat(locationData.lon) || null
     }));
     console.log('Selected location:', locationData);
   };
 
   // Handle updates to the new POI from the POI card
   const handleNewPoiUpdate = (updatedPoi) => {
-    setNewPoi({
-      name: updatedPoi.title || updatedPoi.name || '',
-      narrative: updatedPoi.narrative || '',
-      type: updatedPoi.type || '',
-      address: updatedPoi.address || newPoi.address,
-      lat: updatedPoi.lat,
-      lng: updatedPoi.lng
+    // Using the functional form of setState to prevent issues with stale state,
+    // which can happen when state is updated based on its previous value.
+    setNewPoi(prev => {
+      // Guard against the updated POI object being undefined.
+      if (!updatedPoi) return prev;
+
+      return {
+        ...prev,
+        name: updatedPoi.title || updatedPoi.name || '',
+        narrative: updatedPoi.narrative || '',
+        type: updatedPoi.type || '',
+        address: updatedPoi.address || prev.address,
+        lat: updatedPoi.lat ?? prev.lat,
+        lng: updatedPoi.lng ?? prev.lng
+      };
     });
   };
 
@@ -303,7 +303,7 @@ const QuestMap = ({
         <div className="lg:col-span-2">
           <Map 
             locations={mapLocations}
-            center={mapCenter}
+            center={mapCenter && mapCenter.length === 2 ? mapCenter : [34.5, -92.5]}
             zoom={13}
             mapId="quest-brainstorm-map"
             height="400px"

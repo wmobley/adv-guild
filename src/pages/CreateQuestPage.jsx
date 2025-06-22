@@ -1,35 +1,131 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import QuestForm from '../components/QuestForm';
 import QuestMap from '../components/QuestMap';
 import QuestRoute from '../components/QuestRoute';
 import QuestTips from '../components/QuestTips';
 import Header from '../components/Header';
-import { useQuestPlanning } from '../hooks/useQuestPlanning';
+import apiClient from '../services/advGuildApiClient';
 
 const CreateQuestPage = () => {
-  const {
-    // State
-    showMap,
-    mapCenter,
-    mapLocations,
-    isLoadingLocation,
-    suggestedPois,
-    isLoadingSuggestions,
-    selectedPoi,
-    showPoiForm, // Make sure this is included
-    
-    // Actions
-    handleBrainstormItinerary,
-    handleFindNearbyAttractions,
-    handleAddPointOfInterest,
-    handleSelectPoi,
-    handleRemovePointOfInterest,
-    handleCloseMap,
-    handleTogglePoiForm,
-    handleUpdatePoi,
-    handleReorderLocations,
-    handleUpdateLocationDay
-  } = useQuestPlanning();
+  const navigate = useNavigate();
+
+  // State for the quest creation process
+  const [mapLocations, setMapLocations] = useState([]); // This is the quest route
+  const [showMap, setShowMap] = useState(false);
+  const [mapCenter, setMapCenter] = useState([34.5, -92.5]); // Default center
+  const [isLoadingLocation, setIsLoadingLocation] = useState(false); // Placeholder
+  const [suggestedPois, setSuggestedPois] = useState([]); // Placeholder
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false); // Placeholder
+  const [selectedPoi, setSelectedPoi] = useState(null);
+  const [showPoiForm, setShowPoiForm] = useState(false);
+
+  // State for reference data like difficulties and interests
+  const [difficulties, setDifficulties] = useState([]);
+  const [interests, setInterests] = useState([]);
+
+  // Fetch reference data on component mount
+  useEffect(() => {
+    const fetchReferenceData = async () => {
+      try {
+        const [difficultiesData, interestsData] = await Promise.all([
+          apiClient.getDifficulties(),
+          apiClient.getInterests(),
+        ]);
+        setDifficulties(difficultiesData || []);
+        setInterests(interestsData || []);
+      } catch (error) {
+        console.error("Failed to fetch reference data for quest creation:", error);
+      }
+    };
+    fetchReferenceData();
+  }, []); // Empty dependency array ensures this runs only once on mount
+
+  // --- Action Handlers ---
+
+  // Called from QuestMap after a new location is created via the API
+  const handleAddPointOfInterest = (newLocation) => {
+    setMapLocations(prevLocations => [...prevLocations, { ...newLocation, day: 1 }]);
+    if (!showMap) {
+      setShowMap(true);
+    }
+  };
+
+  const handleSetInitialLocation = async (locationData) => {
+    // locationData comes from LocationForm's onLocationSelect
+    // e.g., { formatted: '...', lat: '...', lon: '...', display_name: '...' }
+    setIsLoadingLocation(true);
+    try {
+      const newLocationPayload = {
+        name: locationData.formatted,
+        address: locationData.display_name,
+        latitude: parseFloat(locationData.lat),
+        longitude: parseFloat(locationData.lon),
+      };
+
+      const createdLocation = await apiClient.createLocation(newLocationPayload);
+      
+      handleAddPointOfInterest(createdLocation); // This adds to state and shows map
+      setMapCenter([createdLocation.latitude, createdLocation.longitude]);
+
+    } catch (error) {
+      console.error("Failed to set initial location:", error);
+      alert(`Error setting initial location: ${error.message}`);
+    } finally {
+      setIsLoadingLocation(false);
+    }
+  };
+
+  // Main quest submission handler, passed to QuestForm
+  const handleCreateQuest = async (formData) => {
+    if (mapLocations.length === 0) {
+      alert("A quest must have at least one location.");
+      return;
+    }
+
+    const questData = {
+      name: formData.name,
+      synopsis: formData.synopsis,
+      difficulty_id: parseInt(formData.difficulty_id, 10),
+      interest_id: parseInt(formData.interest_id, 10),
+      is_public: formData.is_public,
+      start_location_id: mapLocations[0].id,
+      locations: mapLocations.map((loc, index) => ({
+        location_id: loc.id,
+        step: index + 1,
+        day: loc.day || 1,
+      })),
+    };
+
+    try {
+      const newQuest = await apiClient.createQuest(questData);
+      alert(`Successfully created quest: ${newQuest.name}`);
+      navigate(`/quests/${newQuest.id}`); // Redirect to the new quest's itinerary page
+    } catch (error) {
+      console.error("Failed to create quest:", error);
+      alert(`Error creating quest: ${error.message}`);
+    }
+  };
+
+  const handleRemovePointOfInterest = (poiId) => {
+    setMapLocations(prev => prev.filter(loc => loc.id !== poiId));
+  };
+
+  const handleReorderLocations = (reorderedLocations) => {
+    setMapLocations(reorderedLocations);
+  };
+
+  const handleUpdateLocationDay = (locationId, newDay) => {
+    setMapLocations(prev => prev.map(loc => (loc.id === locationId ? { ...loc, day: newDay } : loc)));
+  };
+
+  const handleSelectPoi = (poi) => {
+    setSelectedPoi(poi);
+    if (poi.latitude && poi.longitude) {
+      setMapCenter([poi.latitude, poi.longitude]);
+    }
+    setShowMap(true);
+  };
 
   return (
     <>
@@ -59,16 +155,23 @@ const CreateQuestPage = () => {
               isLoadingSuggestions={isLoadingSuggestions}
               selectedPoi={selectedPoi}
               showPoiForm={showPoiForm} // Add this prop
-              onCloseMap={handleCloseMap}
+              onCloseMap={() => setShowMap(false)}
               onSelectPoi={handleSelectPoi}
               onRemoveLocation={handleRemovePointOfInterest}
-              onFindNearbyAttractions={handleFindNearbyAttractions}
-              onTogglePoiForm={handleTogglePoiForm} // This toggles the form visibility
+              onFindNearbyAttractions={() => alert('Finding nearby attractions is not yet implemented.')}
+              onTogglePoiForm={() => setShowPoiForm(prev => !prev)} // This toggles the form visibility
               onAddPoi={handleAddPointOfInterest} // This handles adding the POI
-              onUpdatePoi={handleUpdatePoi}
+              onUpdatePoi={(updatedPoi) => setMapLocations(prev => prev.map(loc => (loc.id === updatedPoi.id ? { ...loc, ...updatedPoi } : loc)))}
             />
 
-            <QuestForm onBrainstormItinerary={handleBrainstormItinerary} />
+            <QuestForm
+              onCreateQuest={handleCreateQuest}
+              difficulties={difficulties}
+              interests={interests}
+              mapLocationsCount={mapLocations.length}
+              onSetInitialLocation={handleSetInitialLocation}
+              isLoadingLocation={isLoadingLocation}
+            />
             
             {showMap && (
               <QuestRoute

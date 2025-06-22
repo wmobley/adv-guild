@@ -49,6 +49,7 @@ const PoiCard = ({ poi, onSelect, isSelected, onUpdate, defaultExpanded = false,
   useEffect(() => {
     console.log('POI prop changed:', poi);
     if (poi) {
+      console.log(poi)
       const newEditData = {
         title: poi.title || poi.name || '',
         narrative: poi.narrative || '',

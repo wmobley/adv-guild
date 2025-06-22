@@ -1,7 +1,0 @@
-connectorId: adv-guild-backend
-generate:
-  javascriptSdk:
-    outputDir: ../../dataconnect-generated/js/adv-guild-backend-connector
-    package: "@firebasegen/adv-guild-backend-connector"
-    packageJsonDir: ../..
-    react: true
