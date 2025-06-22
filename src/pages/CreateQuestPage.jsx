@@ -19,27 +19,76 @@ const CreateQuestPage = () => {
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false); // Placeholder
   const [selectedPoi, setSelectedPoi] = useState(null);
   const [showPoiForm, setShowPoiForm] = useState(false);
+  const [startingLocation, setStartingLocation] = useState(null); // Store starting location without adding to map
 
   // State for reference data like difficulties and interests
   const [difficulties, setDifficulties] = useState([]);
   const [interests, setInterests] = useState([]);
+  const [questTypes, setQuestTypes] = useState([]);
+  const [isLoadingReferenceData, setIsLoadingReferenceData] = useState(true);
 
   // Fetch reference data on component mount
   useEffect(() => {
     const fetchReferenceData = async () => {
+      setIsLoadingReferenceData(true);
       try {
-        const [difficultiesData, interestsData] = await Promise.all([
-          apiClient.getDifficulties(),
-          apiClient.getInterests(),
-        ]);
+        console.log('Fetching reference data...');
+        
+        // Fetch difficulties and interests
+        const difficultiesData = await apiClient.getDifficulties();
+        const interestsData = await apiClient.getInterests();
+        
+        console.log('Difficulties data:', difficultiesData);
+        console.log('Interests data:', interestsData);
+        
         setDifficulties(difficultiesData || []);
         setInterests(interestsData || []);
+
+        // Try to fetch quest types, but handle if it doesn't exist
+        try {
+          const questTypesData = await apiClient.getQuestTypes();
+          console.log('Quest types data:', questTypesData);
+          setQuestTypes(questTypesData || []);
+        } catch (questTypeError) {
+          console.log('QuestTypes API not available, using default');
+          setQuestTypes([{ id: 1, name: 'Adventure' }]); // Default quest type
+        }
+
       } catch (error) {
         console.error("Failed to fetch reference data for quest creation:", error);
+        // Set some default values if the API calls fail
+        setDifficulties([
+          { id: 1, name: 'Easy' },
+          { id: 2, name: 'Medium' },
+          { id: 3, name: 'Hard' },
+          { id: 4, name: 'Expert' }
+        ]);
+        setInterests([
+          { id: 1, name: 'Adventure' },
+          { id: 2, name: 'Culture' },
+          { id: 3, name: 'Nature' },
+          { id: 4, name: 'History' }
+        ]);
+        setQuestTypes([{ id: 1, name: 'Adventure' }]);
+      } finally {
+        setIsLoadingReferenceData(false);
       }
     };
     fetchReferenceData();
   }, []); // Empty dependency array ensures this runs only once on mount
+
+  // Debug log when state changes
+  useEffect(() => {
+    console.log('Difficulties state updated:', difficulties);
+  }, [difficulties]);
+
+  useEffect(() => {
+    console.log('Interests state updated:', interests);
+  }, [interests]);
+
+  useEffect(() => {
+    console.log('Quest types state updated:', questTypes);
+  }, [questTypes]);
 
   // --- Action Handlers ---
 
@@ -65,7 +114,8 @@ const CreateQuestPage = () => {
 
       const createdLocation = await apiClient.createLocation(newLocationPayload);
       
-      handleAddPointOfInterest(createdLocation); // This adds to state and shows map
+      // Store the starting location but don't add to map or show map yet
+      setStartingLocation(createdLocation);
       setMapCenter([createdLocation.latitude, createdLocation.longitude]);
 
     } catch (error) {
@@ -78,24 +128,44 @@ const CreateQuestPage = () => {
 
   // Main quest submission handler, passed to QuestForm
   const handleCreateQuest = async (formData) => {
-    if (mapLocations.length === 0) {
-      alert("A quest must have at least one location.");
+    console.log('handleCreateQuest called with:', formData);
+    console.log('startingLocation:', startingLocation);
+    console.log('mapLocations:', mapLocations);
+    
+    if (!startingLocation) {
+      alert("A quest must have a starting location.");
       return;
     }
+
+    // Combine starting location with additional locations from the map
+    const allLocations = [startingLocation, ...mapLocations];
+
+    // Generate a basic itinerary from the locations
+    const itineraryArray = allLocations.map((loc, index) => ({
+      day: loc.day || 1,
+      step: index + 1,
+      location_name: loc.name,
+      description: `Visit ${loc.name}`,
+      location_id: loc.id
+    }));
 
     const questData = {
       name: formData.name,
       synopsis: formData.synopsis,
       difficulty_id: parseInt(formData.difficulty_id, 10),
       interest_id: parseInt(formData.interest_id, 10),
+      quest_type_id: parseInt(formData.quest_type_id || questTypes[0]?.id || 1, 10), // Use form data or default
       is_public: formData.is_public,
-      start_location_id: mapLocations[0].id,
-      locations: mapLocations.map((loc, index) => ({
+      start_location_id: startingLocation.id,
+      itinerary: JSON.stringify(itineraryArray), // Convert to JSON string
+      locations: allLocations.map((loc, index) => ({
         location_id: loc.id,
         step: index + 1,
         day: loc.day || 1,
       })),
     };
+
+    console.log('Quest data being sent:', JSON.stringify(questData, null, 2));
 
     try {
       const newQuest = await apiClient.createQuest(questData);
@@ -103,7 +173,24 @@ const CreateQuestPage = () => {
       navigate(`/quests/${newQuest.id}`); // Redirect to the new quest's itinerary page
     } catch (error) {
       console.error("Failed to create quest:", error);
-      alert(`Error creating quest: ${error.message}`);
+      console.error("Error details:", error.detail || error.message || error);
+      
+      // Better error message formatting
+      let errorMessage = "Error creating quest: ";
+      if (error.detail && Array.isArray(error.detail)) {
+        errorMessage += error.detail.map(err => {
+          if (typeof err === 'object') {
+            return `${err.field || 'Field'}: ${err.message || JSON.stringify(err)}`;
+          }
+          return err;
+        }).join(', ');
+      } else if (error.message) {
+        errorMessage += error.message;
+      } else {
+        errorMessage += "Unknown error occurred";
+      }
+      
+      alert(errorMessage);
     }
   };
 
@@ -127,6 +214,21 @@ const CreateQuestPage = () => {
     setShowMap(true);
   };
 
+  // Show loading state while fetching reference data
+  if (isLoadingReferenceData) {
+    return (
+      <>
+        <Header />
+        <div className="min-h-screen bg-gradient-to-br from-guild-secondary to-white flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-guild-primary mx-auto mb-4"></div>
+            <p className="text-xl text-guild-text">Loading quest creation form...</p>
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <Header />
@@ -145,42 +247,48 @@ const CreateQuestPage = () => {
 
           {/* Quest Form Section */}
           <div className="bg-white rounded-xl shadow-2xl border-2 border-guild-highlight/20 p-8">
-            {/* Quest Map Section */}
-            <QuestMap
-              showMap={showMap}
-              mapCenter={mapCenter}
-              mapLocations={mapLocations}
-              isLoadingLocation={isLoadingLocation}
-              suggestedPois={suggestedPois}
-              isLoadingSuggestions={isLoadingSuggestions}
-              selectedPoi={selectedPoi}
-              showPoiForm={showPoiForm} // Add this prop
-              onCloseMap={() => setShowMap(false)}
-              onSelectPoi={handleSelectPoi}
-              onRemoveLocation={handleRemovePointOfInterest}
-              onFindNearbyAttractions={() => alert('Finding nearby attractions is not yet implemented.')}
-              onTogglePoiForm={() => setShowPoiForm(prev => !prev)} // This toggles the form visibility
-              onAddPoi={handleAddPointOfInterest} // This handles adding the POI
-              onUpdatePoi={(updatedPoi) => setMapLocations(prev => prev.map(loc => (loc.id === updatedPoi.id ? { ...loc, ...updatedPoi } : loc)))}
-            />
-
             <QuestForm
               onCreateQuest={handleCreateQuest}
               difficulties={difficulties}
               interests={interests}
-              mapLocationsCount={mapLocations.length}
+              questTypes={questTypes}
+              mapLocationsCount={startingLocation ? 1 + mapLocations.length : 0}
               onSetInitialLocation={handleSetInitialLocation}
               isLoadingLocation={isLoadingLocation}
             />
-            
-            {showMap && (
-              <QuestRoute
-                mapLocations={mapLocations}
-                onRemoveLocation={handleRemovePointOfInterest}
-                onReorderLocations={handleReorderLocations}
-                onUpdateLocationDay={handleUpdateLocationDay}
-                onSelectPoi={handleSelectPoi}
-              />
+
+            {/* Show map section only after starting location is set */}
+            {startingLocation && (
+              <>
+                {/* Quest Map Section */}
+                <QuestMap
+                  showMap={showMap}
+                  mapCenter={mapCenter}
+                  mapLocations={mapLocations}
+                  isLoadingLocation={isLoadingLocation}
+                  suggestedPois={suggestedPois}
+                  isLoadingSuggestions={isLoadingSuggestions}
+                  selectedPoi={selectedPoi}
+                  showPoiForm={showPoiForm}
+                  onCloseMap={() => setShowMap(false)}
+                  onSelectPoi={handleSelectPoi}
+                  onRemoveLocation={handleRemovePointOfInterest}
+                  onFindNearbyAttractions={() => alert('Finding nearby attractions is not yet implemented.')}
+                  onTogglePoiForm={() => setShowPoiForm(prev => !prev)}
+                  onAddPoi={handleAddPointOfInterest}
+                  onUpdatePoi={(updatedPoi) => setMapLocations(prev => prev.map(loc => (loc.id === updatedPoi.id ? { ...loc, ...updatedPoi } : loc)))}
+                />
+
+                {showMap && (
+                  <QuestRoute
+                    mapLocations={mapLocations}
+                    onRemoveLocation={handleRemovePointOfInterest}
+                    onReorderLocations={handleReorderLocations}
+                    onUpdateLocationDay={handleUpdateLocationDay}
+                    onSelectPoi={handleSelectPoi}
+                  />
+                )}
+              </>
             )}
           </div>
           
