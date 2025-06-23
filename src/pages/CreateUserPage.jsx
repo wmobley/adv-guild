@@ -25,7 +25,7 @@ const CreateUserPage = () => {
         password,
         display_name: displayName,
       });
-      navigate('/discovery'); // Registration returns a token, so we can log in immediately
+      navigate('/my-journey'); // Registration returns a token, so we can log in immediately
     } catch (err) {
       setError(err.message || 'Failed to create account. Please try again.');
       console.error("Create user error:", err);
