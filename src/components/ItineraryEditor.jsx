@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import QuestMap from './QuestMap';
 import QuestRoute from './QuestRoute';
 import apiClient from '../services/advGuildApiClient';
+import QuestMapDisplay from './QuestMapDisplay';
 
 const ItineraryEditor = ({ 
   quest, 
@@ -79,7 +79,7 @@ const ItineraryEditor = ({
     }));
   };
 
-  // Called from QuestMap after a new location is created via the API
+  // Called from QuestMapDisplay after a new location is created via the API
   const handleAddPointOfInterest = (newLocation) => {
     setMapLocations(prevLocations => [...prevLocations, { ...newLocation, day: 1 }]);
   };
@@ -147,7 +147,7 @@ const ItineraryEditor = ({
       </div>
 
       {/* Quest Map Section */}
-      <QuestMap
+      <QuestMapDisplay
         showMap={showMap}
         mapCenter={mapCenter}
         mapLocations={mapLocations}
