@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import QuestMap from './QuestMap';
+import QuestMapDisplay from './QuestMapDisplay';
 import QuestRoute from './QuestRoute';
 
 const QuestItineraryBuilder = ({ 
@@ -36,7 +36,7 @@ const QuestItineraryBuilder = ({
     }));
   };
 
-  // Called from QuestMap after a new location is created via the API
+  // Called from QuestMapDisplay after a new location is created via the API
   const handleAddPointOfInterest = (newLocation) => {
     setMapLocations(prevLocations => [...prevLocations, { ...newLocation, day: 1 }]);
   };
@@ -96,7 +96,7 @@ const QuestItineraryBuilder = ({
       </header>
 
       {/* Quest Map Section */}
-      <QuestMap
+      <QuestMapDisplay
         showMap={showMap}
         mapCenter={mapCenter}
         mapLocations={mapLocations}

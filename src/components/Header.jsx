@@ -31,10 +31,10 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-guild-primary text-guild-secondary shadow-lg sticky top-0 z-50">
+    <header className="bg-guild-primary text-guild-secondary shadow-lg sticky top-0 z-[9999]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         <Link to="/" className="text-3xl font-extrabold hover:text-guild-highlight">
-          The Adventurer’s Guild
+          The Adventurer's Guild
         </Link>
 
         <nav>
