@@ -67,7 +67,16 @@ const MyJourneyPage = () => {
   const allQuests = [...savedQuestsList, ...ownedQuestsList];
   const questMarkers = allQuests
     .map(quest => {
-      const location = locationsMap[quest.start_location_id];
+      let location = null;
+      // Prioritize embedded start_location object
+      if (quest.start_location && quest.start_location.latitude && quest.start_location.longitude) {
+        location = quest.start_location;
+      }
+      // Fallback to using the locations map
+      else if (quest.start_location_id && locationsMap[quest.start_location_id]) {
+        location = locationsMap[quest.start_location_id];
+      }
+
       if (location && location.latitude && location.longitude) {
         const isOwned = ownedQuestsList.some(ownedQuest => ownedQuest.id === quest.id);
         return {

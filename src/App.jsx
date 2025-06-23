@@ -1,6 +1,4 @@
-import './firebaseInit'; // Import to initialize Firebase
 import Home from './pages/Home';
-// import SdkTestComponent from './components/SdkTestComponent'; // Can be re-enabled if needed
 import CreateUserPage from './pages/CreateUserPage';
 import LoginPage from './pages/LoginPage';
 import MyJourneyPage from './pages/MyJourneyPage';

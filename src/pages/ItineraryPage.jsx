@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import apiClient from '../services/advGuildApiClient';
 import Header from '../components/Header';
 import ItineraryEditor from '../components/ItineraryEditor';
-import QuestMap from '../components/QuestMap';
+import QuestMapDisplay from '../components/QuestMapDisplay';
 
 const ItineraryPage = () => {
   const { questId } = useParams(); // Get questId from URL
@@ -55,6 +55,16 @@ const ItineraryPage = () => {
           } catch {
             questData.itinerary = [questData.itinerary];
           }
+        }
+
+        // Ensure all itinerary items are objects and have a 'day' property
+        if (questData.itinerary && Array.isArray(questData.itinerary)) {
+          questData.itinerary = questData.itinerary.map(item => {
+            if (typeof item === 'string') {
+              return { description: item, day: 1 }; // Convert string to object, assign to Day 1
+            }
+            return { ...item, day: item.day || 1 }; // Ensure day exists, default to 1
+          });
         }
 
         // Extract quest locations for the map
@@ -122,6 +132,22 @@ const ItineraryPage = () => {
       fetchData();
     }
   }, [questId]);
+
+  // Group itinerary items by day
+  const groupedItinerary = useMemo(() => {
+    if (!quest || !quest.itinerary || quest.itinerary.length === 0) {
+      return {};
+    }
+
+    return quest.itinerary.reduce((acc, item) => {
+      const day = item.day || 1; // Fallback, though we ensure it's set during fetch
+      if (!acc[day]) {
+        acc[day] = [];
+      }
+      acc[day].push(item);
+      return acc;
+    }, {});
+  }, [quest]);
 
   // For now, let's make this always true for testing
   const isOwner = true; // TODO: Fix ownership check
@@ -349,18 +375,25 @@ const ItineraryPage = () => {
                   Edit Itinerary
                 </button>
               </div>
-              
-              {quest.itinerary && quest.itinerary.length > 0 ? (
-                <div className="space-y-4">
-                  {quest.itinerary.map((item, index) => (
-                    <div key={index} className="flex items-start p-4 bg-guild-secondary/30 rounded-lg border border-guild-highlight/20">
-                      <div className="flex-shrink-0 w-8 h-8 bg-guild-accent text-white rounded-full flex items-center justify-center text-sm font-bold mr-4">
-                        {index + 1}
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-guild-text leading-relaxed">
-                          {typeof item === 'string' ? item : item.description || item.location_name || 'Itinerary step'}
-                        </p>
+
+              {Object.keys(groupedItinerary).length > 0 ? (
+                <div className="space-y-6">
+                  {Object.keys(groupedItinerary).sort((a, b) => parseInt(a) - parseInt(b)).map(day => (
+                    <div key={`day-${day}`} className="mb-6">
+                      <h3 className="text-xl font-semibold text-guild-primary mb-3">Day {day}</h3>
+                      <div className="space-y-4">
+                        {groupedItinerary[day].map((item, index) => (
+                          <div key={index} className="flex items-start p-4 bg-guild-secondary/30 rounded-lg border border-guild-highlight/20">
+                            <div className="flex-shrink-0 w-8 h-8 bg-guild-accent text-white rounded-full flex items-center justify-center text-sm font-bold mr-4">
+                              {index + 1}
+                            </div>
+                            <div className="flex-1">
+                              <p className="text-guild-text leading-relaxed">
+                                {item.description || item.location_name || 'Itinerary step'}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   ))}
@@ -369,7 +402,7 @@ const ItineraryPage = () => {
                 <div className="text-center py-8 bg-guild-secondary/20 rounded-lg border border-guild-highlight/20">
                   <div className="text-guild-neutral text-3xl mb-3">📋</div>
                   <p className="text-guild-neutral">No detailed itinerary available for this quest yet.</p>
-                  <div>
+                  <div className="mt-4">
                     <p className="text-guild-text text-sm mt-1 mb-4">You can add an itinerary to help adventurers plan their journey!</p>
                     <button
                       onClick={handleEditClick}
@@ -408,7 +441,7 @@ const ItineraryPage = () => {
             </div>
 
             <div className="h-96 bg-guild-secondary/30 rounded-lg border-2 border-guild-highlight/20 overflow-hidden">
-              <QuestMap markers={questMarkers} />
+              <QuestMapDisplay markers={questMarkers} />
             </div>
           </section>
         

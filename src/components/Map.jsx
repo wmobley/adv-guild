@@ -118,7 +118,7 @@ const normalizeLocationData = (location) => {
   // Check if lat/lng properties exist (alternative naming)
   else if (location.lat !== undefined && location.lng !== undefined) {
     const lat = parseFloat(location.lat);
-    const lng = parseFloat(location.lng); // FIX: Corrected from location.longitude
+    const lng = parseFloat(location.lng);
     
     if (!isNaN(lat) && !isNaN(lng)) {
       coords = [lat, lng];
@@ -219,7 +219,7 @@ export default function Map({
           try {
             const marker = L.marker(normalizedLocation.coords);
 
-            let popupHtml;
+            
             let popupNode; // Declare popupNode here
             if (React.isValidElement(normalizedLocation.popupContent)) {
               popupNode = document.createElement('div');
@@ -229,7 +229,7 @@ export default function Map({
               popupNode = document.createElement('div'); // Create a div for string content
               popupNode.innerHTML = `<strong>${normalizedLocation.name || 'Unknown'}</strong><br>${normalizedLocation.description || 'No description'}`;
             }
-            marker.bindPopup(popupNode); // Bind the DOM node directly
+            marker.bindPopup(popupNode);
             
             markerLayer.addLayer(marker); // Add marker to the layer group
             leafletMarkers.push(marker);
