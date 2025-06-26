@@ -1,12 +1,20 @@
-// Automatically use HTTPS in production, HTTP in development
-const getDefaultApiUrl = () => {
-  if (typeof window !== 'undefined' && window.location.protocol === 'https:') {
+// Force HTTPS in production, HTTP in development
+const getApiBaseUrl = () => {
+  // If environment variable is set, use it
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL
+  }
+  
+  // Check if we're in production (deployed) or if page is loaded over HTTPS
+  if (import.meta.env.PROD || (typeof window !== 'undefined' && window.location.protocol === 'https:')) {
     return 'https://35.225.179.98'
   }
+  
+  // Development default
   return 'http://localhost:8000'
 }
 
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || getDefaultApiUrl()
+export const API_BASE_URL = getApiBaseUrl()
 
 // Optional: Create a helper function for making API calls
 export const apiCall = async (endpoint, options = {}) => {
