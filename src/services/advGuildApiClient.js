@@ -184,7 +184,7 @@ export const getPublicQuests = async () => {
 
 export const getQuestById = async (questId) => {
   console.log('🎯 Getting quest by ID:', questId);
-  return request(`/quests/${questId}/`);
+  return request(`/quests/${questId}`);
 };
 
 export const createQuest = async (questData) => {
