@@ -178,7 +178,7 @@ export const getCurrentUser = async () => {
 // --- Quest Endpoints ---
 export const getPublicQuests = async () => {
   console.log('🗺️ Getting public quests');
-  const data = await request('/quests/');
+  const data = await request('/quests');
   return data;
 };
 
@@ -189,7 +189,7 @@ export const getQuestById = async (questId) => {
 
 export const createQuest = async (questData) => {
   console.log('✨ Creating new quest');
-  return request('/quests/', {
+  return request('/quests', {
     method: 'POST',
     body: JSON.stringify(questData),
   });
@@ -199,7 +199,7 @@ export const createQuest = async (questData) => {
 export const getLocations = async () => {
   console.log('📍 Getting locations from backend');
   try {
-    const data = await request('/locations/');
+    const data = await request('/locations');
     console.log('✅ Locations retrieved:', data);
     return data;
   } catch (error) {
@@ -223,7 +223,7 @@ export const getLocationsPublic = async () => {
   try {
     // Try without authentication first
     const headers = { 'Content-Type': 'application/json' };
-    const response = await fetch(`${API_BASE_URL}/locations/`, {
+    const response = await fetch(`${API_BASE_URL}/locations`, {
       method: 'GET',
       headers
     });
@@ -244,7 +244,7 @@ export const getLocationsPublic = async () => {
 
 export const createLocation = async (locationData) => {
   console.log('✨ Creating new location');
-  return request('/locations/', {
+  return request('/locations', {
     method: 'POST',
     body: JSON.stringify(locationData),
   });
@@ -252,13 +252,13 @@ export const createLocation = async (locationData) => {
 
 export const getDifficulties = async () => {
   console.log('⚡ Getting difficulties');
-  const data = await request('/reference/difficulties/');
+  const data = await request('/reference/difficulties');
   return data;
 };
 
 export const getInterests = async () => {
   console.log('🎯 Getting interests');
-  const data = await request('/reference/interests/');
+  const data = await request('/reference/interests');
   return data;
 };
 
