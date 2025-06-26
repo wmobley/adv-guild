@@ -154,7 +154,7 @@ export const registerUser = async (userData) => {
   console.log('📝 Attempting registration for:', userData.email);
   
   // userData: { email, password, ...other fields for your UserCreate schema }
-  const response = await request('/auth/register/', {
+  const response = await request('/auth/register', {
     method: 'POST',
     body: JSON.stringify(userData),
   });
