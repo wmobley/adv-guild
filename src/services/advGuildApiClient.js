@@ -265,7 +265,7 @@ export const getInterests = async () => {
 // --- Saved/Bookmarked Quests ---
 export const getSavedQuests = async () => {
   console.log('💾 Getting saved quests');
-  const data = await request('/users/me/bookmarks/');
+  const data = await request('/users/me/bookmarks');
   return data || [];
 };
 
@@ -326,7 +326,7 @@ const updateQuest = async (questId, updateData) => {
 
 export const getOwnedQuests = async () => {
   console.log('👑 Getting owned quests');
-  const data = await request('/users/me/quests/');
+  const data = await request('/users/me/quests');
   return data || [];
 };
 
