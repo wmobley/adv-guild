@@ -1,4 +1,12 @@
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
+// Automatically use HTTPS in production, HTTP in development
+const getDefaultApiUrl = () => {
+  if (typeof window !== 'undefined' && window.location.protocol === 'https:') {
+    return 'https://35.225.179.98'
+  }
+  return 'http://localhost:8000'
+}
+
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || getDefaultApiUrl()
 
 // Optional: Create a helper function for making API calls
 export const apiCall = async (endpoint, options = {}) => {
