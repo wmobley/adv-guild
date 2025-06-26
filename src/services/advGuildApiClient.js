@@ -2,7 +2,7 @@
 // Update the first line to force HTTPS in production
 const getApiBaseUrl = () => {
   const envUrl = import.meta.env.VITE_API_BASE_URL;
-  
+  console.log(envUrl)
   if (envUrl) {
     // If we're in production and the URL is HTTP, convert to HTTPS
     if (import.meta.env.PROD && envUrl.startsWith('http://')) {
@@ -252,13 +252,13 @@ export const createLocation = async (locationData) => {
 
 export const getDifficulties = async () => {
   console.log('⚡ Getting difficulties');
-  const data = await request('/reference/difficulties/');
+  const data = await request('/reference/difficulties');
   return data;
 };
 
 export const getInterests = async () => {
   console.log('🎯 Getting interests');
-  const data = await request('/reference/interests/');
+  const data = await request('/reference/interests');
   return data;
 };
 
