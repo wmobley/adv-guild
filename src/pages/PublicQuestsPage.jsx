@@ -98,7 +98,7 @@ const PublicQuestsPage = () => {
                 The <Link> component requires a Router context, which isn't available when rendering into a Leaflet popup.
                 This ensures the link works correctly.
               */}
-              <a href={`/quests/${quest.id}`} className="text-guild-accent hover:underline mt-2 inline-block">View Quest</a>
+              <a href={`/quests/${quest.id}/`} className="text-guild-accent hover:underline mt-2 inline-block">View Quest</a>
             </div>
           )
         };
