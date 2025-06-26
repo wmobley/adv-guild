@@ -15,7 +15,16 @@ const getApiBaseUrl = () => {
   return import.meta.env.PROD ? 'https://api.adv-guild.com/api/v1' : 'http://localhost:8000/api/v1';
 };
 
-const API_BASE_URL = getApiBaseUrl();
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1';
+
+// Add debugging
+console.log('🔍 Environment check:', {
+  VITE_API_BASE_URL: import.meta.env.VITE_API_BASE_URL,
+  API_BASE_URL: API_BASE_URL,
+  NODE_ENV: import.meta.env.NODE_ENV,
+  PROD: import.meta.env.PROD,
+  windowProtocol: typeof window !== 'undefined' ? window.location.protocol : 'N/A'
+});
 
 // Helper to get the auth token (e.g., from localStorage)
 const getAuthToken = () => {
