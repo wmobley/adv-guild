@@ -7,7 +7,7 @@ const getApiBaseUrl = () => {
   
   // Check if we're in production (deployed) or if page is loaded over HTTPS
   if (import.meta.env.PROD || (typeof window !== 'undefined' && window.location.protocol === 'https:')) {
-    return 'https://35.225.179.98'
+    return 'api.adv-guild.com'
   }
   
   // Development default

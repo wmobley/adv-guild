@@ -1,5 +1,21 @@
 // src/services/advGuildApiClient.js
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1';
+// Update the first line to force HTTPS in production
+const getApiBaseUrl = () => {
+  const envUrl = import.meta.env.VITE_API_BASE_URL;
+  
+  if (envUrl) {
+    // If we're in production and the URL is HTTP, convert to HTTPS
+    if (import.meta.env.PROD && envUrl.startsWith('http://')) {
+      return envUrl.replace('http://', 'https://');
+    }
+    return envUrl;
+  }
+  
+  // Default fallback
+  return import.meta.env.PROD ? 'https://api.adv-guild.com/api/v1' : 'http://localhost:8000/api/v1';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 // Helper to get the auth token (e.g., from localStorage)
 const getAuthToken = () => {
