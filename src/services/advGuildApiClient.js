@@ -59,7 +59,10 @@ const request = async (endpoint, options = {}) => {
     headers,
   };
 
-  console.log(`🌐 Making API request to: ${API_BASE_URL}${endpoint}`);
+  const fullUrl = `${API_BASE_URL}${endpoint}`;
+  console.log(`🌐 Making API request to: ${fullUrl}`); // This should show HTTPS
+  console.log('🔍 Full URL being called:', fullUrl);
+  
   console.log('📋 Request config:', {
     method: config.method || 'GET',
     headers: {

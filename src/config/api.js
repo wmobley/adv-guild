@@ -7,11 +7,11 @@ const getApiBaseUrl = () => {
   
   // Check if we're in production (deployed) or if page is loaded over HTTPS
   if (import.meta.env.PROD || (typeof window !== 'undefined' && window.location.protocol === 'https:')) {
-    return 'api.adv-guild.com'
+    return 'https://api.adv-guild.com/api/v1'
   }
   
   // Development default
-  return 'http://localhost:8000'
+  return 'http://localhost:8000/api/v1'
 }
 
 export const API_BASE_URL = getApiBaseUrl()
