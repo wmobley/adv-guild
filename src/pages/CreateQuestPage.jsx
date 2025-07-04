@@ -23,6 +23,7 @@ const CreateQuestPage = () => {
   const [createdQuest, setCreatedQuest] = useState(null);
   const [isQuestCreated, setIsQuestCreated] = useState(false);
   const [isCreatingQuest, setIsCreatingQuest] = useState(false);
+  const [isFinalizing, setIsFinalizing] = useState(false);
 
   // Fetch reference data on component mount
   useEffect(() => {
@@ -175,10 +176,24 @@ const CreateQuestPage = () => {
 
   // Handler to finalize the quest with complete itinerary
   const handleFinalizeQuest = async (updateData) => {
+    if (!createdQuest) {
+      alert("Cannot finalize a quest that hasn't been created yet.");
+      return;
+    }
+    setIsFinalizing(true);
     try {
       console.log('Updating quest with complete itinerary:', updateData);
       
-      const updatedQuest = await apiClient.updateQuest(createdQuest.id, updateData);
+      // Ensure the itinerary is a JSON string before sending, which is consistent
+      // with the API's expected format for this complex data type.
+      const payload = {
+        ...updateData,
+        itinerary: Array.isArray(updateData.itinerary)
+          ? JSON.stringify(updateData.itinerary)
+          : updateData.itinerary,
+      };
+
+      const updatedQuest = await apiClient.updateQuest(createdQuest.id, payload);
       console.log('Quest updated successfully:', updatedQuest);
       
       alert(`Quest "${createdQuest.name}" has been finalized with your complete itinerary!`);
@@ -187,6 +202,8 @@ const CreateQuestPage = () => {
     } catch (error) {
       console.error("Failed to finalize quest:", error);
       alert(`Error finalizing quest: ${error.message || 'Unknown error occurred'}`);
+    } finally {
+      setIsFinalizing(false);
     }
   };
 
@@ -244,13 +261,14 @@ const CreateQuestPage = () => {
             </div>
           )}
 
-          {/* Show map section after quest is created or starting location is set */}
-          {(isQuestCreated || startingLocation) && (
+          {/* Show itinerary builder only after the initial quest has been created */}
+          {isQuestCreated && (
             <div className="bg-white rounded-xl shadow-2xl border-2 border-guild-highlight/20 p-8 mt-8">
               {/* Quest Map Section */}
               <QuestItineraryBuilder
                 quest={createdQuest}
                 onFinalizeQuest={handleFinalizeQuest}
+                isFinalizing={isFinalizing}
               />
             </div>
           )}

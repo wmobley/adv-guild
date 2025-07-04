@@ -14,7 +14,7 @@ const QuestRoute = ({
 
   // Location type options - centralized here to match QuestMap
   const locationTypes = [
-    'Shop', 'Museum', 'Trail', 'Restaurant', 'Park', 'Monument', 
+    'Shop', 'Museum', 'Trail', 'Restaurant', 'Park', 'Monument',
     'Theater', 'Gallery', 'Library', 'Market', 'Landmark', 'Other'
   ];
 
@@ -25,19 +25,19 @@ const QuestRoute = ({
       'Museum': '🏛️',
       'Trail': '🥾',
       'Restaurant': '🍽️',
-      'Park': '🌳',
-      'Monument': '🗿',
-      'Theater': '🎭',
-      'Gallery': '🎨',
-      'Library': '📚',
-      'Market': '🏪',
-      'Landmark': '📍',
-      'Other': '📌'
+      // 'Park': '🌳',
+      // 'Monument': '🗿',
+      // 'Theater': '🎭',
+      // 'Gallery': '🎨',
+      // 'Library': '📚',
+      // 'Market': '🏪',
+      // 'Landmark': '📍',
+      // 'Other': '📌'
     };
     return icons[type] || '📌';
   };
 
-  if (mapLocations.length <= 1) return null;
+  if (!mapLocations || mapLocations.length === 0) return null;
 
   // Group locations by day
   const locationsByDay = mapLocations.reduce((acc, location, index) => {
@@ -62,27 +62,33 @@ const QuestRoute = ({
     e.dataTransfer.dropEffect = 'move';
   };
 
-  const handleDragLeave = () => {
+  const handleDragLeave = (e) => {
+    e.preventDefault();
     setDragOverIndex(null);
   };
 
   const handleDrop = (e, dropIndex) => {
-    if (!onReorderLocations) return;
+    if (!onReorderLocations || draggedIndex === null) return;
     e.preventDefault();
+
     if (draggedIndex !== null && draggedIndex !== dropIndex) {
-      onReorderLocations(draggedIndex, dropIndex);
+      const newLocations = [...mapLocations];
+      const [draggedItem] = newLocations.splice(draggedIndex, 1);
+      newLocations.splice(dropIndex, 0, draggedItem);
+      onReorderLocations(newLocations);
     }
+
     setDraggedIndex(null);
     setDragOverIndex(null);
   };
 
-  const handleDayChange = (locationIndex, newDay) => {
+  const handleDayChange = (locationId, newDay) => {
     if (onUpdateLocationDay) {
-      onUpdateLocationDay(locationIndex, parseInt(newDay));
+      onUpdateLocationDay(locationId, parseInt(newDay));
     }
   };
 
-  const handlePoiSelect = (poi, globalIndex) => {
+  const handlePoiSelect = (poi) => {
     if (onSelectPoi) {
       onSelectPoi(poi);
     }
@@ -90,7 +96,7 @@ const QuestRoute = ({
 
   const handlePoiUpdate = (updatedPoi, globalIndex) => {
     if (onUpdateLocation) {
-      onUpdateLocation(globalIndex, updatedPoi);
+      onUpdateLocation(updatedPoi.id, updatedPoi);
     }
   };
 
@@ -153,7 +159,7 @@ const QuestRoute = ({
                       {onUpdateLocationDay && (
                         <select
                           value={location.day || 1}
-                          onChange={(e) => handleDayChange(globalIndex, e.target.value)}
+                          onChange={(e) => handleDayChange(location.id, e.target.value)}
                           className="text-xs border border-guild-highlight/30 rounded px-2 py-1 bg-white text-guild-text shadow-sm"
                           onClick={(e) => e.stopPropagation()}
                         >
@@ -166,11 +172,11 @@ const QuestRoute = ({
                       )}
 
                       {/* Remove button */}
-                      {globalIndex > 0 && onRemoveLocation && (
+                      {onRemoveLocation && (
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            onRemoveLocation(globalIndex);
+                            onRemoveLocation(location.id);
                           }}
                           className="bg-white/90 text-red-500 hover:text-red-700 p-1 rounded shadow-sm hover:shadow-md transition-all"
                           title="Remove Point of Interest"
@@ -186,12 +192,12 @@ const QuestRoute = ({
                     <div className="relative">
                       <PoiCard
                         poi={location}
-                        onSelect={(poi) => handlePoiSelect(poi, globalIndex)}
+                        onSelect={handlePoiSelect}
                         isSelected={location.isSelected || false}
                         defaultExpanded={location.defaultExpanded || false} // Pass the flag for new POIs
                         onUpdate={(updatedData) => handlePoiUpdate(updatedData, globalIndex)} // Pass onUpdate
-                        locationTypes={locationTypes} // Add missing prop
-                        getTypeIcon={getTypeIcon} // Add missing prop
+                        activeLocationTypes={locationTypes} // Pass locationTypes as activeLocationTypes to fix ReferenceError
+                        getTypeIcon={getTypeIcon}
                       />
                     </div>
                   </div>

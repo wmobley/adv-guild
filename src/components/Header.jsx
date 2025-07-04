@@ -1,32 +1,29 @@
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import apiClient from '../services/advGuildApiClient'; // Import apiClient
+import apiClient from '../services/advGuildApiClient';
+import tokenService from '../services/tokenService';
 
 const Header = () => {
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(tokenService.hasToken());
 
   useEffect(() => {
     // Function to check authentication status
     const checkAuthStatus = () => {
-      const token = localStorage.getItem('authToken');
-      setIsLoggedIn(!!token); // Set isLoggedIn to true if token exists, false otherwise
+      setIsLoggedIn(tokenService.hasToken());
     };
 
-    checkAuthStatus(); // Initial check when component mounts
-
-    // Listen for changes in localStorage (e.g., if token is removed by another tab/window)
+    // The 'storage' event is dispatched by tokenService on set/remove
     window.addEventListener('storage', checkAuthStatus);
 
     // Cleanup the event listener when the component unmounts
     return () => {
       window.removeEventListener('storage', checkAuthStatus);
     };
-  }, []); // Empty dependency array means this effect runs once on mount
+  }, []);
 
   const handleLogout = () => {
-    apiClient.logoutUser(); // Clear the token from localStorage
-    setIsLoggedIn(false); // Update local state
+    apiClient.logoutUser(); // This calls tokenService.removeToken(), which triggers the 'storage' event listener.
     navigate('/'); // Redirect to login page
   };
 

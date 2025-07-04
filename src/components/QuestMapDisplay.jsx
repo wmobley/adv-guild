@@ -249,6 +249,11 @@ const QuestMapDisplay = ({ markers, center, zoom }) => {
           if (bounds.length > 1 || (!center && !zoom)) {
             console.log('🎯 Fitting map to bounds');
             map.fitBounds(latLngBounds, { padding: [50, 50], maxZoom: 14 });
+            // Sometimes Leaflet needs a nudge to redraw correctly after DOM changes
+            // and fitting bounds, especially in a dynamic React layout.
+            setTimeout(() => {
+              map.invalidateSize();
+            }, 100);
           } else {
             console.log('⏭️ Skipping fitBounds - single marker with explicit center/zoom');
           }

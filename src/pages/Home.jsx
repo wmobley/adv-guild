@@ -1,31 +1,18 @@
 import Header from '../components/Header';
 import Hero from '../components/Hero';
-import QuestForm from '../components/QuestForm';
-import QuestCard from '../components/QuestCard';
+import QuestSearch from '../components/QuestSearch';
 import Map from '../components/Map';
 
 const Home = () => {
   return (
     <>
       <Header />
-      <main className="max-w-6xl mx-auto px-4 py-12 space-y-12">
-         <Map />
+      <main className="max-w-7xl mx-auto px-4 py-12 space-y-16">
         <Hero />
+        <QuestSearch />
+        <h2 className="text-3xl font-bold text-guild-primary text-center pt-8">Explore Quest Starting Points</h2>
+        <Map useApiData={true} height="500px" />
        
-        <QuestForm />
-
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <QuestCard
-            title="The Elven Valley"
-            subtitle="Based on Lauterbrunnen, Switzerland"
-            description="This misty alpine valley inspired Tolkien's Rivendell — a serene haven amidst towering waterfalls."
-          />
-          <QuestCard
-            title="The Drowned Port"
-            subtitle="Based on Newburyport, MA"
-            description="Foggy shores and Gothic buildings formed the backdrop to Lovecraft's Innsmouth — beware what sleeps below."
-          />
-        </section>
       </main>
 
       <footer className="bg-guild-secondary border-t border-guild-neutral/20 mt-16">

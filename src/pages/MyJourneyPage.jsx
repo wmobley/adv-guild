@@ -6,6 +6,70 @@ import QuestMapDisplay from '/src/components/QuestMapDisplay.jsx';
 
 import apiClient from '../services/advGuildApiClient'; // Import the API client
 
+// Moved QuestList outside of MyJourneyPage to prevent re-creation on every render.
+const QuestList = ({ quests, title, isLoading, error, emptyMessage, emptyActionText, emptyActionLink, alwaysShowAction = false, locationsMap }) => (
+  <div className="mb-8">
+    <div className="flex justify-between items-center mb-4">
+      <h3 className="text-2xl font-semibold text-guild-primary">{title}</h3>
+      {alwaysShowAction && !isLoading && !error && quests.length > 0 && (
+        <Link
+          to={emptyActionLink}
+          className="bg-guild-accent hover:bg-guild-primary text-white font-bold py-2 px-4 rounded-lg text-sm shadow-md transition-all duration-300"
+        >
+          Create New Quest
+        </Link>
+      )}
+    </div>
+
+    {isLoading ? (
+      <div className="text-center py-8">
+        <div className="animate-pulse text-guild-highlight text-4xl mb-3">🧭</div>
+        <p className="text-guild-neutral">Loading your quests from the Guild API...</p>
+      </div>
+    ) : error ? (
+      <div className="text-center py-8 bg-red-50 p-4 rounded-lg border border-red-200">
+        <div className="text-red-500 text-4xl mb-3">⚠️</div>
+        <p className="text-red-700 font-medium">Error loading quests.</p>
+        <p className="text-red-600 text-sm">{error}</p>
+      </div>
+    ) : quests.length > 0 ? (
+      <ul className="space-y-3">
+        {quests.map(quest => (
+          <Link key={quest.id} to={`/quests/${quest.id}`} className="block">
+            <li className="p-4 bg-gradient-to-r from-guild-secondary to-guild-secondary/70 hover:from-guild-highlight/20 hover:to-guild-accent/20 rounded-lg border-2 border-guild-highlight/40 hover:border-guild-accent transition-all cursor-pointer shadow-md hover:shadow-xl group transform hover:-translate-y-1">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <p className="font-bold text-guild-primary mb-2 group-hover:text-guild-accent transition-colors text-lg">{quest.name}</p>
+                  <p className="text-sm text-guild-text flex items-center font-medium">
+                    <span className="text-guild-highlight mr-2 text-base">📍</span>
+                    {quest.start_location?.name || locationsMap[quest.start_location_id]?.name || 'Unknown Location'}
+                  </p>
+                </div>
+                <div className="text-guild-accent opacity-0 group-hover:opacity-100 transition-all transform group-hover:translate-x-1 text-xl font-bold">
+                  →
+                </div>
+              </div>
+            </li>
+          </Link>
+        ))}
+      </ul>
+    ) : (
+      <div className="text-center py-8">
+        <div className="text-guild-highlight text-4xl mb-3">⚔️</div>
+        <p className="text-guild-primary font-bold text-lg mb-1">{emptyMessage}</p>
+        <p className="text-guild-text font-medium mb-6">
+          {title.includes('Owned') ? 'Create your first quest to start building adventures for others!' : 'Explore public quests or create your own to begin your adventure!'}
+        </p>
+        <Link
+          to={emptyActionLink}
+          className="bg-guild-accent hover:bg-guild-primary text-white font-bold py-3 px-8 rounded-lg text-lg shadow-lg transition-all duration-300 inline-block"
+        >
+          {emptyActionText}
+        </Link>
+      </div>
+    )}
+  </div>
+);
 
 const MyJourneyPage = () => {
   const [savedQuestsList, setSavedQuestsList] = useState([]);
@@ -96,59 +160,6 @@ const MyJourneyPage = () => {
     })
     .filter(marker => marker !== null);
 
-  const QuestList = ({ quests, title, isLoading, error, emptyMessage, emptyActionText, emptyActionLink }) => (
-    <div className="mb-8">
-      <h3 className="text-2xl font-semibold text-guild-primary mb-4">{title}</h3>
-      {isLoading ? (
-        <div className="text-center py-8">
-          <div className="animate-pulse text-guild-highlight text-4xl mb-3">🧭</div>
-          <p className="text-guild-neutral">Loading your quests from the Guild API...</p>
-        </div>
-      ) : error ? (
-        <div className="text-center py-8 bg-red-50 p-4 rounded-lg border border-red-200">
-          <div className="text-red-500 text-4xl mb-3">⚠️</div>
-          <p className="text-red-700 font-medium">Error loading quests.</p>
-          <p className="text-red-600 text-sm">{error}</p>
-        </div>
-      ) : quests.length > 0 ? (
-        <ul className="space-y-3">
-          {quests.map(quest => (
-            <Link key={quest.id} to={`/quests/${quest.id}`} className="block">
-              <li className="p-4 bg-gradient-to-r from-guild-secondary to-guild-secondary/70 hover:from-guild-highlight/20 hover:to-guild-accent/20 rounded-lg border-2 border-guild-highlight/40 hover:border-guild-accent transition-all cursor-pointer shadow-md hover:shadow-xl group transform hover:-translate-y-1">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <p className="font-bold text-guild-primary mb-2 group-hover:text-guild-accent transition-colors text-lg">{quest.name}</p>
-                    <p className="text-sm text-guild-text flex items-center font-medium">
-                      <span className="text-guild-highlight mr-2 text-base">📍</span>
-                      {locationsMap[quest.start_location_id]?.name || 'Unknown Location'}
-                    </p>
-                  </div>
-                  <div className="text-guild-accent opacity-0 group-hover:opacity-100 transition-all transform group-hover:translate-x-1 text-xl font-bold">
-                    →
-                  </div>
-                </div>
-              </li>
-            </Link>
-          ))}
-        </ul>
-      ) : (
-        <div className="text-center py-8">
-          <div className="text-guild-highlight text-4xl mb-3">⚔️</div>
-          <p className="text-guild-primary font-bold text-lg mb-1">{emptyMessage}</p>
-          <p className="text-guild-text font-medium mb-6">
-            {title.includes('Owned') ? 'Create your first quest to start building adventures for others!' : 'Explore public quests or create your own to begin your adventure!'}
-          </p>
-          <Link
-            to={emptyActionLink}
-            className="bg-guild-accent hover:bg-guild-primary text-white font-bold py-3 px-8 rounded-lg text-lg shadow-lg transition-all duration-300 inline-block"
-          >
-            {emptyActionText}
-          </Link>
-        </div>
-      )}
-    </div>
-  );
-
   return (
     <>
     <Header/>
@@ -181,7 +192,8 @@ const MyJourneyPage = () => {
                 error={errorSavedQuests}
                 emptyMessage="You haven't saved any quests yet."
                 emptyActionText="Explore Quests"
-                emptyActionLink="/quests"
+                emptyActionLink="/public-quests"
+                locationsMap={locationsMap}
               />
               
               <QuestList
@@ -192,6 +204,8 @@ const MyJourneyPage = () => {
                 emptyMessage="You haven't created any quests yet."
                 emptyActionText="Create Your First Quest"
                 emptyActionLink="/create-quest"
+                alwaysShowAction={true}
+                locationsMap={locationsMap}
               />
             </div>
           </section>

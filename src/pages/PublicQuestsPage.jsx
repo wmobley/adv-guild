@@ -81,31 +81,50 @@ const PublicQuestsPage = () => {
     });
   }, [publicQuests, selectedDifficulty, selectedInterest, loading]);
 
-  // Prepare markers for the map from the fetched quest data
-  const questMarkers = filteredQuests
-    .map(quest => {
-      const location = locationsMap[quest.start_location_id];
-      if (location && location.latitude && location.longitude) {
-        return {
-          coords: [location.latitude, location.longitude],
-          popupContent: (
-            <div className="font-sans">
-              <strong className="text-guild-primary block text-lg">{quest.name}</strong>
-              <span className="text-sm text-guild-neutral">{location.name}</span>
-              <br />
-              {/* 
-                Using a standard <a> tag here instead of React Router's <Link> component.
-                The <Link> component requires a Router context, which isn't available when rendering into a Leaflet popup.
-                This ensures the link works correctly.
-              */}
-              <a href={`/quests/${quest.id}/`} className="text-guild-accent hover:underline mt-2 inline-block">View Quest</a>
-            </div>
-          )
-        };
-      }
-      return null;
-    })
-    .filter(marker => marker !== null); // Filter out quests with no location data
+  // Prepare markers for the map from the filtered quest data, memoized for performance
+  const questMarkers = React.useMemo(() => {
+    return filteredQuests
+      .map((quest, index) => {
+        // --- DIAGNOSTIC LOGGING: Inspect the quest object from the API ---
+        console.log(`[Marker Processing] Quest #${index + 1} (ID: ${quest.id}):`, quest);
+
+        let location = null;
+
+        // Logic to find the location data, checking multiple possible structures
+        if (quest.startLocation && quest.startLocation.latitude && quest.startLocation.longitude) {
+          location = quest.startLocation; // Check for embedded 'startLocation' (camelCase)
+        } else if (quest.start_location && quest.start_location.latitude && quest.start_location.longitude) {
+          location = quest.start_location; // Check for embedded 'start_location' (snake_case)
+        } else if (quest.start_location_id && locationsMap[quest.start_location_id]) {
+          location = locationsMap[quest.start_location_id]; // Fallback to using the locations map by ID
+        }
+
+        if (location && location.latitude && location.longitude) {
+          const coords = [parseFloat(location.latitude), parseFloat(location.longitude)];
+          // Final check for valid coordinates after parsing
+          if (!isNaN(coords[0]) && !isNaN(coords[1])) {
+            return {
+              coords: coords,
+              popupContent: (
+                <div className="font-sans">
+                  <strong className="text-guild-primary block text-lg">{quest.name}</strong>
+                  <span className="text-sm text-guild-neutral">{location.name}</span>
+                  <br />
+                  <a href={`/quests/${quest.id}`} className="text-guild-accent hover:underline mt-2 inline-block">View Quest</a>
+                </div>
+              )
+            };
+          } else {
+            console.warn(`[Marker Processing] Invalid coordinates for quest ID ${quest.id} after parsing:`, location);
+          }
+        } else {
+            console.warn(`[Marker Processing] No valid location found for quest ID ${quest.id}.`);
+        }
+
+        return null;
+      })
+      .filter(marker => marker !== null);
+  }, [filteredQuests, locationsMap]);
 
   if (loading) return (
     <div className="min-h-screen bg-gradient-to-br from-guild-secondary to-white flex items-center justify-center">
@@ -195,7 +214,7 @@ const PublicQuestsPage = () => {
                 <div className="space-y-2 mb-4">
                   <p className="text-sm text-guild-neutral flex items-center">
                     <span className="text-guild-highlight mr-2">📍</span>
-                    Start: {locationsMap[quest.start_location_id]?.name || 'N/A'}
+                    Start: {quest.startLocation?.name || quest.start_location?.name || locationsMap[quest.start_location_id]?.name || 'N/A'}
                   </p>
                   <p className="text-sm text-guild-neutral flex items-center">
                     <span className="text-guild-highlight mr-2">⭐</span>
@@ -222,7 +241,7 @@ const PublicQuestsPage = () => {
                   >
                     View Details
                   </Link>
-                  <button className="px-4 py-2 border-2 border-guild-accent/30 text-guild-accent hover:border-guild-accent hover:bg-guild-accent hover:text-white rounded-lg transition-all">
+                  <button className="px-4 py-2 border-2 border-guild-accent/30 text-guild-accent hover:border-guild-accent hover:bg-guild-accent hover:text-white rounded-lg transition-all" title="Save Quest">
                     💾
                   </button>
                 </div>
